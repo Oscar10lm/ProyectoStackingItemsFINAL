@@ -54,14 +54,13 @@ public class Tower {
         if (cups <= 0) {
             return;
         }
-
-        for (int size = cups; size >= 1; size--) {
-            pushCup(size);
+        int vc = 1;
+        for (int id = cups; vc <= id; vc++) {
+            pushCup(vc);
         }
     }
 
     
-
     /**
      * Agrega una tapa a la taza indicada.
      * Valida altura máxima antes de insertarla.
@@ -74,7 +73,7 @@ public class Tower {
         int lidSize = cup.getSize() - 2;
         if (lidSize <= 0) return;
 
-        Lid lid = new Lid(id, lidSize, getColorForSize(id));
+        Lid lid = new Lid(id, lidSize, getColorForSize(lidSize));
 
         int projectedHeight = getCurrentHeight() + BLOCK_SIZE;
 
@@ -100,10 +99,15 @@ public class Tower {
     /**
      * Agrega una taza respetando reglas de anidamiento y altura máxima.
      */
-    public void pushCup(int size) {
+    public void pushCup(int id) {
+        if (id <= 0) {
+            javax.swing.JOptionPane.showMessageDialog(null,
+                "El identificador de la taza debe ser mayor que 0.");
+            return;
+        }
 
-        int id = size;
-
+        int size = sizeFromId(id);
+  
         for (Cup c : cups) {
             if (c.getId() == id) {
                 if (isVisible) {
@@ -114,7 +118,7 @@ public class Tower {
             }
         }
 
-        String color = getColorForSize(size);
+        String color = getColorForSize(id);
         Cup newCup = new Cup(id, size, color);
 
         int widthPx = newCup.getPixelWidth();
@@ -134,6 +138,7 @@ public class Tower {
                 int floorY = topCup.getY() + topCup.getRealPixelHeight();
                 int insideFloor = floorY - BLOCK_SIZE;
                 targetY = insideFloor - newCup.getRealPixelHeight();
+                //targetY = floorY - newCup.getRealPixelHeight();
             } else {
                 int topY = getTopY();
                 targetY = topY - newCup.getRealPixelHeight();
@@ -267,13 +272,18 @@ public class Tower {
         clearTowerVisual();
 
         for (Cup c : original) {
-            pushCup(c.getSize());
+            pushCup(c.getId());
             for (Lid lid : c.getLids()) {
                 pushLid(c.getId());
             }
         }
     }
 
+    public void swap (String[] o1, String[] o2){
+        
+    
+    }
+    
     /**
      * Ordena la torre de mayor a menor tamaño.
      */
@@ -297,7 +307,7 @@ public class Tower {
         clearTowerVisual();
 
         for (Cup c : original) {
-            pushCup(c.getSize());
+            pushCup(c.getId());
             for (Lid lid : c.getLids()) {
                 pushLid(c.getId());
             }
@@ -556,6 +566,10 @@ public class Tower {
         return null;
     }
 
+    private int sizeFromId(int id) {
+        return (2 * id) - 1;
+    }
+    
     /**
      * Retorna un color asociado al tamaño.
      */
