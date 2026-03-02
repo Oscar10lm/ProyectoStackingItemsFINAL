@@ -95,10 +95,20 @@ public class Tower {
             return;
         }
 
-        if (cup != null) {
-            cup.addLid(lid);
-            int lidX = cup.getX() + ((cup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
-            int lidY = cup.getY() - BLOCK_SIZE;
+        Cup targetCup = cup;
+        if (targetCup == null && !cups.isEmpty()) {
+            Cup topCup = cups.get(cups.size() - 1);
+            if (!topCup.hasLids() && lid.getSize() < topCup.getSize()) {
+                targetCup = topCup;
+            }
+        }
+
+        if (targetCup != null) {
+            targetCup.addLid(lid);
+            int lidX = targetCup.getX() + ((targetCup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
+            int lidY = (lid.getSize() < targetCup.getSize())
+                    ? targetCup.getY() + BLOCK_SIZE
+                    : targetCup.getY() - BLOCK_SIZE;
             lid.moveTo(lidX, lidY);
             if (isVisible) lid.makeVisible();
             return;
@@ -434,6 +444,32 @@ public class Tower {
         
     }
 
+    /**
+     * Cubre las tazas que no tienen tapa usando las tapas ya existentes en la torre.
+     */
+    public void cover() {
+        boolean movedAnyLid = false;
+
+        for (Cup cup : cups) {
+            if (cup.hasLids()) {
+                continue;
+            }
+
+            Lid matchingLid = detachLidById(cup.getId());
+            if (matchingLid == null) {
+                continue;
+            }
+
+            cup.addLid(matchingLid);
+            movedAnyLid = true;
+        }
+
+        if (movedAnyLid) {
+            rebuildTower();
+        }
+    }
+    
+    
     // Consultas
 
     /**
@@ -628,7 +664,9 @@ public class Tower {
                 boolean topHasLid = topCup.hasLids();
                 boolean fitsInside = c.getSize() < topCup.getSize();
 
-                if (!topHasLid && fitsInside) {
+                if (currentTopY < topCup.getY()) {
+                    targetY = currentTopY - c.getRealPixelHeight();
+                } else if (!topHasLid && fitsInside) {
                     int floorY = topCup.getY() + topCup.getRealPixelHeight();
                     int insideFloor = floorY - BLOCK_SIZE;
                     targetY = insideFloor - c.getRealPixelHeight();
@@ -762,7 +800,27 @@ public class Tower {
         return null;
     }
     
+     private Lid detachLidById(int id) {
+        Lid detached = removeStandaloneLidById(id);
+        if (detached != null) {
+            return detached;
+        }
 
+        for (Cup sourceCup : cups) {
+            ArrayList<Lid> lids = sourceCup.getLids();
+            for (int lidIndex = 0; lidIndex < lids.size(); lidIndex++) {
+                Lid lid = lids.get(lidIndex);
+                if (lid.getId() == id) {
+                    lids.remove(lidIndex);
+                    return lid;
+                }
+            }
+        }
+
+        return null;
+    }
+    
+    
     /**
      * Retorna una taza por identificador.
      */
