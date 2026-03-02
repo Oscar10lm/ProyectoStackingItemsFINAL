@@ -115,6 +115,10 @@ public class Cup {
      * Agrega una tapa a la taza.
      */
     public void addLid(Lid lid) {
+        if (!lids.isEmpty()) {
+            Lid previous = lids.remove(0);
+            previous.makeInvisible();
+        }
         lids.add(lid);
     }
 
