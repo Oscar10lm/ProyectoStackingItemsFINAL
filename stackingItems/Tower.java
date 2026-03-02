@@ -107,7 +107,7 @@ public class Tower {
             targetCup.addLid(lid);
             int lidX = targetCup.getX() + ((targetCup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
             int lidY = (lid.getSize() < targetCup.getSize())
-                    ? targetCup.getY() + BLOCK_SIZE
+                    ? targetCup.getY() + targetCup.getRealPixelHeight() - (2 * BLOCK_SIZE)
                     : targetCup.getY() - BLOCK_SIZE;
             lid.moveTo(lidX, lidY);
             if (isVisible) lid.makeVisible();

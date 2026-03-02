@@ -88,7 +88,8 @@ public class Cup {
             int lidX = xPosition + ((size - lid.getSize()) * BLOCK_SIZE) / 2;
             int lidY;
             if (lid.getSize() < size) {
-                lidY = yPosition + BLOCK_SIZE + (i * BLOCK_SIZE);
+                int innerFloorY = yPosition + getRealPixelHeight() - (2 * BLOCK_SIZE);
+                lidY = innerFloorY - (i * BLOCK_SIZE);
             } else {
                 lidY = yPosition - BLOCK_SIZE - (i * BLOCK_SIZE);
             }
