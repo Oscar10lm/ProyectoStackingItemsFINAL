@@ -13,7 +13,7 @@ public class Tower {
     //Constantes de posicionamiento
 
     private static final int TOWER_X = 500;
-    private static final int BASE_Y = 600;
+    private static final int BASE_Y = 700;
     private static final int BLOCK_SIZE = 25;
 
     //Estructuras principales
@@ -94,13 +94,17 @@ public class Tower {
             return;
         }
         
-        removeStandaloneLidById(id);
-        standaloneLids.add(lid);
+        Lid previousStandalone = removeStandaloneLidById(id);
+        if (previousStandalone != null) {
+            previousStandalone.makeInvisible();
+        }
         
         int lidX = TOWER_X - ((lid.getSize() * BLOCK_SIZE) / 2);
         int lidY = getTopY() - BLOCK_SIZE;
         lid.moveTo(lidX, lidY);
-
+        
+        standaloneLids.add(lid);
+        
         if (isVisible) lid.makeVisible();
     }
 
@@ -134,23 +138,34 @@ public class Tower {
         int targetY;
 
         Cup topCup = cups.isEmpty() ? null : cups.get(cups.size() - 1);
+        
+        int topY = getTopY();
+        
 
         if (topCup == null) {
-            targetY = BASE_Y - newCup.getRealPixelHeight();
+             if (topY < BASE_Y) {
+                targetY = topY - newCup.getRealPixelHeight();
+            } else {
+                targetY = BASE_Y - newCup.getRealPixelHeight();
+            }
+            
         } else {
 
             boolean topHasLid = topCup.hasLids();
             boolean fitsInside = newCup.getSize() < topCup.getSize();
 
-            if (!topHasLid && fitsInside) {
-                int floorY = topCup.getY() + topCup.getRealPixelHeight();
-                int insideFloor = floorY - BLOCK_SIZE;
-                targetY = insideFloor - newCup.getRealPixelHeight();
-                //targetY = floorY - newCup.getRealPixelHeight();
-            } else {
-                int topY = getTopY();
-                targetY = topY - newCup.getRealPixelHeight();
+                if (topY < topCup.getY()) {
+                    targetY = topY - newCup.getRealPixelHeight();
+                } else if (!topHasLid && fitsInside) {
+                    int floorY = topCup.getY() + topCup.getRealPixelHeight();
+                    int insideFloor = floorY - BLOCK_SIZE;
+                    targetY = insideFloor - newCup.getRealPixelHeight();
+                    //targetY = floorY - newCup.getRealPixelHeight();
+                } else {
+
+                    targetY = topY - newCup.getRealPixelHeight();
             }
+            
         }
 
         int projectedHeight = BASE_Y - targetY;
@@ -165,12 +180,6 @@ public class Tower {
 
         newCup.moveTo(targetX, targetY);
         
-        Lid standaloneMatch = removeStandaloneLidById(id);
-        if (standaloneMatch != null) {
-            newCup.addLid(standaloneMatch);
-        }
-
-
         if (isVisible) newCup.makeVisible();
 
         cups.add(newCup);
