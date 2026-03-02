@@ -1,9 +1,9 @@
 #BlueJ package file
-dependency1.from=Lid
-dependency1.to=Rectangle
+dependency1.from=Rectangle
+dependency1.to=Canvas
 dependency1.type=UsesDependency
-dependency2.from=Rectangle
-dependency2.to=Canvas
+dependency2.from=Lid
+dependency2.to=Rectangle
 dependency2.type=UsesDependency
 dependency3.from=Cup
 dependency3.to=Rectangle
@@ -25,8 +25,8 @@ editor.fx.0.width=1376
 editor.fx.0.x=-8
 editor.fx.0.y=-8
 objectbench.height=127
-objectbench.width=397
-package.divider.horizontal=0.6121212121212121
+objectbench.width=389
+package.divider.horizontal=0.6
 package.divider.vertical=0.7919254658385093
 package.editor.height=490
 package.editor.width=540
