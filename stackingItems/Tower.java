@@ -280,7 +280,77 @@ public class Tower {
     }
 
     public void swap (String[] o1, String[] o2){
-        
+         if (!isValidObjectRef(o1) || !isValidObjectRef(o2)) {
+            if (isVisible) {
+                javax.swing.JOptionPane.showMessageDialog(null,
+                        "Cada objeto debe tener formato {\"tipo\", \"id\"}.");
+            }
+            return;
+        }
+
+        String type1 = o1[0].trim().toLowerCase();
+        String type2 = o2[0].trim().toLowerCase();
+
+        int id1;
+        int id2;
+
+        try {
+            id1 = Integer.parseInt(o1[1].trim());
+            id2 = Integer.parseInt(o2[1].trim());
+        } catch (NumberFormatException e) {
+            if (isVisible) {
+                javax.swing.JOptionPane.showMessageDialog(null,
+                        "Los identificadores deben ser numéricos.");
+            }
+            return;
+        }
+
+        if (type1.equals("cup") && type2.equals("cup")) {
+            int cupIndex1 = findCupIndexById(id1);
+            int cupIndex2 = findCupIndexById(id2);
+
+            if (cupIndex1 == -1 || cupIndex2 == -1) {
+                if (isVisible) {
+                    javax.swing.JOptionPane.showMessageDialog(null,
+                            "No se encontraron ambas tazas para intercambiar.");
+                }
+                return;
+            }
+
+            Collections.swap(cups, cupIndex1, cupIndex2);
+            rebuildTower();
+            return;
+        }
+
+        if (type1.equals("lid") && type2.equals("lid")) {
+            int[] lidRef1 = findLidRefById(id1);
+            int[] lidRef2 = findLidRefById(id2);
+
+            if (lidRef1 == null || lidRef2 == null) {
+                if (isVisible) {
+                    javax.swing.JOptionPane.showMessageDialog(null,
+                            "No se encontraron ambas tapas para intercambiar.");
+                }
+                return;
+            }
+
+            Cup cup1 = cups.get(lidRef1[0]);
+            Cup cup2 = cups.get(lidRef2[0]);
+
+            Lid lid1 = cup1.getLids().get(lidRef1[1]);
+            Lid lid2 = cup2.getLids().get(lidRef2[1]);
+
+            cup1.getLids().set(lidRef1[1], lid2);
+            cup2.getLids().set(lidRef2[1], lid1);
+
+            rebuildTower();
+            return;
+        }
+
+        if (isVisible) {
+            javax.swing.JOptionPane.showMessageDialog(null,
+                    "Solo se pueden intercambiar objetos del mismo tipo (cup-cup o lid-lid).");
+        }    
     
     }
     
@@ -467,14 +537,42 @@ public class Tower {
 
         for (Cup c : cups) c.makeInvisible();
 
-        int currentTop = BASE_Y;
+        int currentTopY = BASE_Y;
+        Cup topCup = null;
 
         for (Cup c : cups) {
             int targetX = TOWER_X - (c.getPixelWidth() / 2);
-            int targetY = currentTop - c.getRealPixelHeight();
+            int targetY;
+
+            if (topCup == null) {
+                targetY = BASE_Y - c.getRealPixelHeight();
+            } else {
+                boolean topHasLid = topCup.hasLids();
+                boolean fitsInside = c.getSize() < topCup.getSize();
+
+                if (!topHasLid && fitsInside) {
+                    int floorY = topCup.getY() + topCup.getRealPixelHeight();
+                    int insideFloor = floorY - BLOCK_SIZE;
+                    targetY = insideFloor - c.getRealPixelHeight();
+                } else {
+                    targetY = currentTopY - c.getRealPixelHeight();
+                }
+            }
+            
             c.moveTo(targetX, targetY);
-            currentTop = targetY;
+            
             if (isVisible) c.makeVisible();
+            
+            if (c.getY() < currentTopY) {
+                currentTopY = c.getY();
+            }
+            for (Lid lid : c.getLids()) {
+                if (lid.getY() < currentTopY) {
+                    currentTopY = lid.getY();
+                }
+            }
+
+            topCup = c;
         }
     }
 
@@ -566,6 +664,35 @@ public class Tower {
         return null;
     }
 
+     private int findCupIndexById(int id) {
+        for (int i = 0; i < cups.size(); i++) {
+            if (cups.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int[] findLidRefById(int id) {
+        for (int cupIndex = 0; cupIndex < cups.size(); cupIndex++) {
+            ArrayList<Lid> cupLids = cups.get(cupIndex).getLids();
+            for (int lidIndex = 0; lidIndex < cupLids.size(); lidIndex++) {
+                if (cupLids.get(lidIndex).getId() == id) {
+                    return new int[]{cupIndex, lidIndex};
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isValidObjectRef(String[] objectRef) {
+        return objectRef != null
+                && objectRef.length == 2
+                && objectRef[0] != null
+                && objectRef[1] != null;
+    }
+
+    
     private int sizeFromId(int id) {
         return (2 * id) - 1;
     }
