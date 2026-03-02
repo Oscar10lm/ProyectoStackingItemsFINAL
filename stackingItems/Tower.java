@@ -69,8 +69,18 @@ public class Tower {
     public void pushLid(int id) {
         
         Cup cup = getCupById(id);
+        
+        
+        if (lidExistsInTower(id)) {
+            if (isVisible) {
+                javax.swing.JOptionPane.showMessageDialog(null,
+                        "La tapa " + id + " ya existe en la torre.");
+            }
+            return;
+        }
+        
+        
         int lidSize = sizeFromId(id);
-
         Lid lid = new Lid(id, lidSize, getColorForSize(id));
         
         int projectedHeight = (cup != null && cup.hasLids())
@@ -92,11 +102,6 @@ public class Tower {
             lid.moveTo(lidX, lidY);
             if (isVisible) lid.makeVisible();
             return;
-        }
-        
-        Lid previousStandalone = removeStandaloneLidById(id);
-        if (previousStandalone != null) {
-            previousStandalone.makeInvisible();
         }
         
         int lidX = TOWER_X - ((lid.getSize() * BLOCK_SIZE) / 2);
@@ -808,4 +813,23 @@ public class Tower {
         String[] colors = {"red", "blue", "green", "yellow", "magenta", "black"};
         return colors[s % colors.length];
     }
+    
+    private boolean lidExistsInTower(int id) {
+        for (Cup c : cups) {
+            for (Lid lid : c.getLids()) {
+                if (lid.getId() == id) {
+                    return true;
+                }
+            }
+        }
+
+        for (Lid lid : standaloneLids) {
+            if (lid.getId() == id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
 }
