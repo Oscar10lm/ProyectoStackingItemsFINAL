@@ -85,7 +85,7 @@ public class Cup {
 
         for (int i = 0; i < lids.size(); i++) {
             Lid lid = lids.get(i);
-            int lidX = xPosition + BLOCK_SIZE;
+            int lidX = xPosition + ((size - lid.getSize()) * BLOCK_SIZE) / 2;
             int lidY = yPosition - BLOCK_SIZE - (i * BLOCK_SIZE);
             lid.moveTo(lidX, lidY);
         }

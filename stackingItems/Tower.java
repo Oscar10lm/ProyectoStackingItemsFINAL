@@ -67,18 +67,11 @@ public class Tower {
      * Valida altura máxima antes de insertarla.
      */
     public void pushLid(int id) {
-
+        
         Cup cup = getCupById(id);
-        
-        
-        int baseSize = (cup != null) ? cup.getSize() : sizeFromId(id);
-        int lidSize = baseSize - 2;
-        
+        int lidSize = sizeFromId(id);
 
-        if (lidSize <= 0) return;
-        
-
-        Lid lid = new Lid(id, lidSize, getColorForSize(lidSize));
+        Lid lid = new Lid(id, lidSize, getColorForSize(id));
         
         int projectedHeight = (cup != null && cup.hasLids())
                 ? getCurrentHeight()
@@ -94,7 +87,7 @@ public class Tower {
 
         if (cup != null) {
             cup.addLid(lid);
-            int lidX = cup.getX() + BLOCK_SIZE;
+            int lidX = cup.getX() + ((cup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
             int lidY = cup.getY() - BLOCK_SIZE;
             lid.moveTo(lidX, lidY);
             if (isVisible) lid.makeVisible();
