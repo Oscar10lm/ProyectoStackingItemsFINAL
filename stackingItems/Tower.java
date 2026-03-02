@@ -303,14 +303,25 @@ public class Tower {
      */
     public void reverseTower() {
 
-        if (cups.isEmpty()) return;
+         if (cups.isEmpty() && standaloneLids.isEmpty()) return;
 
         ArrayList<Cup> original = new ArrayList<>(cups);
         ArrayList<Lid> originalStandalone = new ArrayList<>(standaloneLids);
         
         Collections.reverse(cups);
-
+        
+        for (Cup cup : cups) {
+            Collections.reverse(cup.getLids());
+        }
+        Collections.reverse(standaloneLids);
+        
         if (!fitsWithinHeight()) {
+            Collections.reverse(cups);
+            for (Cup cup : cups) {
+                Collections.reverse(cup.getLids());
+            }
+            Collections.reverse(standaloneLids);
+            
             if (isVisible) {
                 javax.swing.JOptionPane.showMessageDialog(null,
                         "No se puede invertir. Supera la altura máxima.");
@@ -318,18 +329,7 @@ public class Tower {
             return;
         }
 
-        clearTowerVisual();
-
-        for (Cup c : original) {
-            pushCup(c.getId());
-            for (Lid lid : c.getLids()) {
-                pushLid(c.getId());
-            }
-        }
-        
-        for (Lid lid : originalStandalone) {
-            pushLid(lid.getId());
-        }
+        rebuildTower();
     }
 
     public void swap (String[] o1, String[] o2){
