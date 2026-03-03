@@ -194,16 +194,17 @@ public class Tower {
                 targetY = getNestedTargetY(topCup, newCup);
             } else {
                 Cup ancestorContainer = findAncestorContainerFor(topCup, newCup.getSize(), cups.size() - 1);
-                if (ancestorContainer != null) {
-                    targetY = topCup.getY() - newCup.getRealPixelHeight();
-                } else {
-                    targetY = topY - newCup.getRealPixelHeight();
+                    if (ancestorContainer != null) {
+                        targetY = getNestedTargetY(ancestorContainer, newCup);
+                    } else {
+                        targetY = topY - newCup.getRealPixelHeight();
                 }
+            }
                 
             
         }
         
-        }
+
 
         int projectedHeight = BASE_Y - targetY;
 
@@ -718,6 +719,7 @@ public class Tower {
         drawHeightMarks();
         for (Cup c : cups) c.makeVisible();
         for (Lid lid : standaloneLids) lid.makeVisible();
+        for (Lid lid: lidInsertionOrder) lid.makeVisible(); 
     }
 
     /**
@@ -793,7 +795,7 @@ public class Tower {
                 } else {
                     Cup ancestorContainer = findAncestorContainerFor(topCup, c.getSize(), cupIndex - 1);
                     if (ancestorContainer != null) {
-                        targetY = topCup.getY() - c.getRealPixelHeight();
+                        targetY = getNestedTargetY(ancestorContainer, c);
                     } else {
                         targetY = targetY = currentTopY - c.getRealPixelHeight();
                     }

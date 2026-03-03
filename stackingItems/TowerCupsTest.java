@@ -267,6 +267,24 @@ public class TowerCupsTest
         assertTrue(tower.ok());
     }
     
+    @Test
+    public void ShouldNestInAncestorContainerWhenTopCupCannotContain() {
+        // Arrange
+        Tower tower = new Tower(300, 2000);
+
+        // Act
+        tower.pushCup(5);
+        tower.pushCup(1);
+        tower.pushCup(3);
+        tower.pushCup(2);
+        int heightBefore = tower.height();
+        tower.pushCup(4);
+
+        // Assert
+        assertEquals(heightBefore, tower.height(),
+                "La taza 4 debe anidarse dentro de la taza 5 (encima de la 3) y no aumentar la altura.");
+        assertTrue(tower.ok());
+    }
     
     
     //Métodos privados auxiliares
