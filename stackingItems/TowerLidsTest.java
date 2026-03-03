@@ -325,6 +325,46 @@ public class TowerLidsTest
         assertTrue(tower.ok());
     }
     
+     @Test
+    public void ShouldStackLidInNestingCup() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushLid(1);
+        tower.pushLid(2);
+        tower.pushCup(3);
+        tower.pushCup(4);
+        int heightBefore = tower.height();
+
+        // Act
+        tower.pushLid(3);
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        int cup3Index = indexOf(items, "Cup", "3");
+        int cup4Index = indexOf(items, "Cup", "4");
+        int lid3Index = indexOf(items, "Lid", "3");
+
+        assertTrue(cup3Index >= 0 && cup4Index >= 0 && lid3Index >= 0);
+        assertTrue(cup3Index < cup4Index,
+                "La taza 3 debe seguir debajo de la taza 4 en la secuencia.");
+        assertTrue(lid3Index > cup4Index,
+                "La tapa 3 debe quedar asociada a la taza 4 superior, no a la taza 3.");
+        assertEquals(heightBefore, tower.height(),
+                "La tapa 3 debe anidarse dentro de la taza 4 y no incrementar la altura de la torre.");
+        assertTrue(tower.ok());
+    }
+
+    private int indexOf(String[][] items, String type, String id) {
+        for (int i = 0; i < items.length; i++) {
+            if (type.equals(items[i][0]) && id.equals(items[i][1])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    
+    
     
     
 

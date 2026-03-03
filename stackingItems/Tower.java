@@ -85,18 +85,7 @@ public class Tower {
         
         int lidSize = sizeFromId(id);
         Lid lid = new Lid(id, lidSize, getColorForSize(id));
-
-        Cup targetCup = cup;
-         if (targetCup == null && !cups.isEmpty()) {
-            Cup topCup = cups.get(cups.size() - 1);
-        
-        boolean lidFitsInsideTopCup = lid.getSize() < topCup.getSize();
-        boolean canStackInsideTopCup = !topCup.hasLids() || canNestAboveInnerLid(topCup);
-        if (lidFitsInsideTopCup && canStackInsideTopCup) {
-            targetCup = topCup;
-        }
-        
-        }
+        Cup targetCup = resolveTargetCupForLid(cup, lid);
         
         boolean addsTowerHeight = targetCup == null || lid.getSize() >= targetCup.getSize();
         int projectedHeight = getCurrentHeight() + (addsTowerHeight ? BLOCK_SIZE : 0);
@@ -1235,6 +1224,31 @@ public class Tower {
         return lids;
     }
     
+    private Cup resolveTargetCupForLid(Cup requestedCup, Lid lid) {
+        Cup targetCup = requestedCup;
+
+        if (cups.isEmpty()) {
+            return targetCup;
+        }
+
+        Cup topCup = cups.get(cups.size() - 1);
+        boolean lidFitsInsideTopCup = lid.getSize() < topCup.getSize();
+        boolean canStackInsideTopCup = !topCup.hasLids() || canNestAboveInnerLid(topCup);
+
+        if (targetCup == null) {
+            if (lidFitsInsideTopCup && canStackInsideTopCup) {
+                return topCup;
+            }
+            return null;
+        }
+
+        if (targetCup != topCup && targetCup.getY() > topCup.getY()
+                && lidFitsInsideTopCup && canStackInsideTopCup) {
+            return topCup;
+        }
+
+        return targetCup;
+    }
     
     
     
