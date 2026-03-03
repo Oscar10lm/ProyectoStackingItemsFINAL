@@ -181,7 +181,7 @@ public class Tower {
             boolean fitsInsideTop = newCup.getSize() < topCup.getSize();
             boolean canNestWithCurrentTop = !topHasLid || canNestAboveInnerLid(topCup);
 
-            if (!standaloneLids.isEmpty()) {
+            if (hasStandaloneLidAtTop(topY)) {
                 targetY = topY - newCup.getRealPixelHeight();
             } else if (fitsInsideTop && canNestWithCurrentTop) {
                 targetY = getNestedTargetY(topCup, newCup);
@@ -779,7 +779,7 @@ public class Tower {
                 
                 
                         
-                if (!standaloneLids.isEmpty()) {
+                if (hasStandaloneLidAtTop(currentTopY)) {
                     targetY = currentTopY - c.getRealPixelHeight();
                  } else if (fitsInsideTop && canNestWithCurrentTop) {
                     targetY = getNestedTargetY(topCup, c);
@@ -1107,6 +1107,15 @@ public class Tower {
         }
 
         return null;
+    }
+    
+     private boolean hasStandaloneLidAtTop(int topY) {
+        for (Lid lid : standaloneLids) {
+            if (lid.getY() == topY) {
+                return true;
+            }
+        }
+        return false;
     }
     
     

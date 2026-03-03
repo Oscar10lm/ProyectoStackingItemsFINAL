@@ -23,7 +23,7 @@ public class TowerLidsTest
         Tower tower = new Tower(300, 1000);
 
         // Act
-        tower.pushLid(5);
+        tower.pushLid(2);
 
         // Assert
         String[][] items = tower.stackingItems();
@@ -51,7 +51,26 @@ public class TowerLidsTest
         assertEquals(10, tower.height());
         assertTrue(tower.ok());
     }
+    @Test
+    public void ShouldNestCupWhenTopIsInnerLid() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushLid(2);
+        tower.pushCup(1);
+        tower.pushLid(1);
+        tower.pushCup(4);
+        tower.pushLid(3);
+        int heightBefore = tower.height();
 
+        // Act
+        tower.pushCup(2);
+
+        // Assert
+        assertEquals(heightBefore, tower.height(),
+                "La taza 2 debe anidarse sobre la tapa interna superior y no apilarse por una tapa independiente inferior.");
+        assertTrue(tower.ok());
+    }
+    
     @Test
     public void ShouldPlaceLidInsideCup() {
         // Arrange
