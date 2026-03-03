@@ -206,11 +206,84 @@ public class TowerCupsTest
         
     }
     
+     @Test
+    public void ShouldRemoveCupByIdAndKeepTowerConsistent() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(1);
+        tower.pushCup(3);
+        tower.pushCup(2);
+        int previousHeight = tower.height();
+
+        // Act
+        tower.removeCup(3);
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertEquals(2, countByType(items, "Cup"));
+        assertFalse(containsCupId(items, "3"), "La taza con id 3 debe eliminarse de la torre.");
+        assertTrue(tower.height() <= previousHeight, "Al eliminar una taza, la altura no debería aumentar.");
+        assertTrue(tower.ok());
+    }
+    
+    @Test
+    public void ShouldntRemoveCupWhenIdDoesNotExist() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(1);
+        tower.pushCup(2);
+        String[][] itemsBefore = tower.stackingItems();
+        int heightBefore = tower.height();
+
+        // Act
+        tower.removeCup(99);
+
+        // Assert
+        assertArrayEquals(itemsBefore, tower.stackingItems());
+        assertEquals(heightBefore, tower.height());
+        assertTrue(tower.ok());
+    }
+    
+    @Test
+    public void ShouldPopLastInsertedCup() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(2);
+        tower.pushCup(4);
+
+        // Act
+        tower.popCup();
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertEquals(1, countByType(items, "Cup"));
+        assertArrayEquals(new String[]{"Cup", "2"}, items[0]);
+        assertTrue(tower.ok());
+    }
+
+    @Test
+    public void ShouldntPopCupWhenTowerIsEmpty() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+
+        // Act
+        tower.popCup();
+
+        // Assert
+        assertEquals(0, tower.stackingItems().length);
+        assertEquals(0, tower.height());
+        assertTrue(tower.ok());
+    }
     
     
+    //Métodos privados auxiliares
     
+     private boolean containsCupId(String[][] items, String id) {
+        return Arrays.stream(items)
+                .anyMatch(item -> "Cup".equals(item[0]) && id.equals(item[1]));
+    }
     
-    
+
     private long countByType(String[][] items, String type) {
         return Arrays.stream(items).filter(item -> type.equals(item[0])).count();
     }
