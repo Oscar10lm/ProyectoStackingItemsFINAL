@@ -85,11 +85,22 @@ public class Tower {
         
         int lidSize = sizeFromId(id);
         Lid lid = new Lid(id, lidSize, getColorForSize(id));
+
+        Cup targetCup = cup;
+         if (targetCup == null && !cups.isEmpty()) {
+            Cup topCup = cups.get(cups.size() - 1);
         
-        int projectedHeight = (cup != null && cup.hasLids())
-                ? getCurrentHeight()
-                : getCurrentHeight() + BLOCK_SIZE;
-                
+        boolean lidFitsInsideTopCup = lid.getSize() < topCup.getSize();
+        boolean canStackInsideTopCup = !topCup.hasLids() || canNestAboveInnerLid(topCup);
+        if (lidFitsInsideTopCup && canStackInsideTopCup) {
+            targetCup = topCup;
+        }
+        
+        }
+        
+        boolean addsTowerHeight = targetCup == null || lid.getSize() >= targetCup.getSize();
+        int projectedHeight = getCurrentHeight() + (addsTowerHeight ? BLOCK_SIZE : 0);
+
         if (projectedHeight > maxHeight) {
             if (isVisible) {
                 javax.swing.JOptionPane.showMessageDialog(null,
@@ -98,14 +109,7 @@ public class Tower {
             return;
         }
 
-        Cup targetCup = cup;
-        if (targetCup == null && !cups.isEmpty()) {
-            Cup topCup = cups.get(cups.size() - 1);
-            if (!topCup.hasLids() && lid.getSize() < topCup.getSize()) {
-                targetCup = topCup;
-            }
-        }
-
+        
         if (targetCup != null) {
 
             targetCup.addLid(lid);
