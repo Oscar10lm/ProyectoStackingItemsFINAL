@@ -168,6 +168,6 @@ public class TowerTestC1 {
         assertEquals(0, tower.liddedCups().length);
         assertTrue(tower.ok());
     }
-
     
+
 }

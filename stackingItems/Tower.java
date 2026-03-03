@@ -389,6 +389,10 @@ public class Tower {
         rebuildTower();
     }
 
+    /**
+     * Intercambio dos objetos de la torre y deben ser del mismo tipo. Sin cambiar la lógica visual o interna. 
+     *
+     */
     public void swap (String[] o1, String[] o2){
          if (!isValidObjectRef(o1) || !isValidObjectRef(o2)) {
             if (isVisible) {
@@ -720,9 +724,17 @@ public class Tower {
     public void makeVisible() {
         isVisible = true;
         drawHeightMarks();
-        for (Cup c : cups) c.makeVisible();
-        for (Lid lid : standaloneLids) lid.makeVisible();
-        for (Lid lid: lidInsertionOrder) lid.makeVisible(); 
+        for (Cup c : cups) {
+            c.makeVisible();
+        }
+        for (Lid lid : standaloneLids) {
+            lid.makeVisible();
+        }
+
+        for (Lid lid : getAllLidsInTower()) {
+            lid.makeVisible();
+        }
+        
     }
 
     /**
@@ -730,8 +742,20 @@ public class Tower {
      */
     public void makeInvisible() {
         isVisible = false;
-        for (Cup c : cups) c.makeInvisible();
-        for (Lid lid : standaloneLids) lid.makeInvisible();
+        for (Cup c : cups) {
+            c.makeInvisible();
+        }
+        for (Lid lid : standaloneLids) {
+            lid.makeInvisible();
+        }
+        for (Lid lid : getAllLidsInTower()) {
+            lid.makeInvisible();
+        }
+
+        for (Rectangle mark : heightMarks) {
+            mark.makeInvisible();
+        }
+        
     }
 
     /**
@@ -1184,6 +1208,34 @@ public class Tower {
 
         return bestSupport;
     }
+    
+    private ArrayList<Lid> getAllLidsInTower() {
+        ArrayList<Lid> lids = new ArrayList<>();
+
+        for (Cup cup : cups) {
+            for (Lid lid : cup.getLids()) {
+                if (!lids.contains(lid)) {
+                    lids.add(lid);
+                }
+            }
+        }
+
+        for (Lid lid : standaloneLids) {
+            if (!lids.contains(lid)) {
+                lids.add(lid);
+            }
+        }
+
+        for (Lid lid : lidInsertionOrder) {
+            if (!lids.contains(lid)) {
+                lids.add(lid);
+            }
+        }
+
+        return lids;
+    }
+    
+    
     
     
 }
