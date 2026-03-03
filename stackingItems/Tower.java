@@ -107,20 +107,20 @@ public class Tower {
         }
 
         if (targetCup != null) {
-            if (targetCup.hasLids()) {
-                for (Lid existingLid : targetCup.getLids()) {
-                    lidInsertionOrder.remove(existingLid);
-                }
-            }
-            
+
             targetCup.addLid(lid);
             lidInsertionOrder.add(lid);
+
+            int lidIndex = targetCup.getLids().size() - 1;
             int lidX = targetCup.getX() + ((targetCup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
-            int lidY = (lid.getSize() < targetCup.getSize())
-                    ? targetCup.getY() + targetCup.getRealPixelHeight() - (2 * BLOCK_SIZE)
-                    : targetCup.getY() - BLOCK_SIZE;
+            int lidY;
+            if (lid.getSize() < targetCup.getSize()) {
+                int innerFloorY = targetCup.getY() + targetCup.getRealPixelHeight() - (2 * BLOCK_SIZE);
+                lidY = innerFloorY - (lidIndex * BLOCK_SIZE);
+            } else {
+                lidY = targetCup.getY() - BLOCK_SIZE - (lidIndex * BLOCK_SIZE);
+            }
             lid.moveTo(lidX, lidY);
-            lidInsertionOrder.add(lid);
             if (isVisible) lid.makeVisible();
             return;
         }
@@ -133,6 +133,7 @@ public class Tower {
         
         if (isVisible) lid.makeVisible();
     }
+    
 
     /**
      * Agrega una taza respetando reglas de anidamiento y altura máxima.

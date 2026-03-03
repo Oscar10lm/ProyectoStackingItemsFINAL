@@ -20,34 +20,6 @@ import java.util.Set;
  */
 public class TowerCupsTest
 {
-    /**
-     * Constructor Predeterminado de las Pruebas
-     */
-    public TowerCupsTest()
-    {
-        Tower tower = new Tower(1000,1000);
-    }
-
-    /**
-     * Se preparan las tazas que se van a utilizar y datos importantes como la altura o los StackingItems
-     *
-     *
-     */
-    @BeforeEach
-    public void setUp()
-    {
-        Cup cup = new Cup(1,"red");
-    }
-
-    /**
-     * Tears down the test fixture.
-     *
-     * Called after every test case method.
-     */
-    @AfterEach
-    public void tearDown()
-    {
-    }
     
     @Test 
     public void ShouldCreateCup(){
@@ -274,6 +246,27 @@ public class TowerCupsTest
         assertEquals(0, tower.height());
         assertTrue(tower.ok());
     }
+    
+     @Test
+    public void ShouldNestCupWhenTopIsInnerLid() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushLid(2);
+        tower.pushCup(1);
+        tower.pushLid(1);
+        tower.pushCup(4);
+        tower.pushLid(3);
+        int heightBefore = tower.height();
+
+        // Act
+        tower.pushCup(2);
+
+        // Assert
+        assertEquals(heightBefore, tower.height(),
+                "La taza 2 debe anidarse sobre la tapa interna superior y no apilarse por una tapa independiente inferior.");
+        assertTrue(tower.ok());
+    }
+    
     
     
     //Métodos privados auxiliares

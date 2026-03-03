@@ -234,6 +234,31 @@ public class TowerLidsTest
         assertFalse(containsItem(items, "Lid", "7"));
         assertTrue(tower.ok());
     }
+    
+    @Test
+    public void ShouldStackSmallLidInBigLid() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(3);
+        tower.pushCup(4);
+        tower.pushLid(2);
+        int heightBefore = tower.height();
+
+        // Act
+        tower.pushLid(1);
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertEquals(4, items.length);
+        assertTrue(containsItem(items, "Cup", "3"));
+        assertTrue(containsItem(items, "Cup", "4"));
+        assertTrue(containsItem(items, "Lid", "2"));
+        assertTrue(containsItem(items, "Lid", "1"));
+        assertEquals(heightBefore, tower.height(),
+                "Una tapa interna más pequeña debe quedar sobre la tapa interna anterior.");
+        assertTrue(tower.ok());
+    }
+    
 
     private boolean containsItem(String[][] items, String type, String id) {
         return Arrays.stream(items)
