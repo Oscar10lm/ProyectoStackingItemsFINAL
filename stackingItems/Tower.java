@@ -192,20 +192,23 @@ public class Tower {
                 targetY = topY - newCup.getRealPixelHeight();
             } else if (fitsInsideTop && canNestWithCurrentTop) {
                 targetY = getNestedTargetY(topCup, newCup);
-            } else {
-                Cup ancestorContainer = findAncestorContainerFor(topCup, newCup.getSize(), cups.size() - 1);
-                    if (ancestorContainer != null) {
-                        targetY = getNestedTargetY(ancestorContainer, newCup);
-                    } else {
-                        targetY = topY - newCup.getRealPixelHeight();
-                }
-            }
-                
             
+            } else {
+                 Cup ancestorContainer = findAncestorContainerFor(topCup, newCup.getSize(), cups.size() - 1);
+                if (ancestorContainer != null) {
+                    Cup supportCup = findBestSupportInsideAncestor(ancestorContainer, newCup.getSize(), cups.size() - 1);
+                    if (supportCup != null) {
+                        targetY = getStackedAboveCupY(supportCup, newCup);
+                    } else {
+                        targetY = getNestedTargetY(ancestorContainer, newCup);
+                    }
+                } else {
+                       targetY = topY - newCup.getRealPixelHeight();
+                }
+                
+            }
         }
-        
-
-
+                
         int projectedHeight = BASE_Y - targetY;
 
         if (projectedHeight > maxHeight) {
@@ -795,7 +798,12 @@ public class Tower {
                 } else {
                     Cup ancestorContainer = findAncestorContainerFor(topCup, c.getSize(), cupIndex - 1);
                     if (ancestorContainer != null) {
-                        targetY = getNestedTargetY(ancestorContainer, c);
+                        Cup supportCup = findBestSupportInsideAncestor(ancestorContainer, c.getSize(), cupIndex - 1);
+                        if (supportCup != null) {
+                            targetY = getStackedAboveCupY(supportCup, c);
+                        } else {
+                            targetY = getNestedTargetY(ancestorContainer, c);
+                        }
                     } else {
                         targetY = targetY = currentTopY - c.getRealPixelHeight();
                     }
@@ -1147,7 +1155,35 @@ public class Tower {
         return covers;
     }
     
-    
+     private int getStackedAboveCupY(Cup supportCup, Cup newCup) {
+        return supportCup.getY() - newCup.getRealPixelHeight();
+    }
+
+    private Cup findBestSupportInsideAncestor(Cup ancestorCup, int candidateCupSize, int maxIndex) {
+        Cup bestSupport = null;
+
+        for (int i = 0; i <= maxIndex && i < cups.size(); i++) {
+            Cup candidate = cups.get(i);
+
+            if (candidate == ancestorCup) {
+                continue;
+            }
+
+            boolean isInsideAncestor = candidate.getY() > ancestorCup.getY()
+                    && candidate.getSize() < ancestorCup.getSize();
+            boolean fitsAboveCandidate = candidate.getSize() < candidateCupSize;
+
+            if (!isInsideAncestor || !fitsAboveCandidate) {
+                continue;
+            }
+
+            if (bestSupport == null || candidate.getSize() > bestSupport.getSize()) {
+                bestSupport = candidate;
+            }
+        }
+
+        return bestSupport;
+    }
     
     
 }

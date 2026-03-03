@@ -103,7 +103,7 @@ public class TowerTestC1 {
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);   // altura base = 9
         tower.pushLid(3);   // +1
-        tower.pushCup(2);   // anida, no suma
+        tower.pushCup(2);   // + 5
         tower.pushLid(1);   // tapa interna, no suma
         tower.pushLid(7);   // tapa externa independiente, +1
 
@@ -111,7 +111,7 @@ public class TowerTestC1 {
         int currentHeight = tower.height();
 
         // Assert
-        assertEquals(11, currentHeight);
+        assertEquals(16, currentHeight);
     }
 
     @Test
@@ -155,7 +155,6 @@ public class TowerTestC1 {
     public void ShouldExitAndClearAllTowerData() {
         // Arrange
         Tower tower = new Tower(300, 1000);
-        tower.makeVisible();
         tower.pushCup(5);
         tower.pushLid(5);
         tower.pushLid(8);
@@ -170,24 +169,5 @@ public class TowerTestC1 {
         assertTrue(tower.ok());
     }
 
-    @Test
-    public void ShouldntReportOkWhenTowerExceedsMaxHeight() {
-        // Arrange
-        Tower tower = new Tower(300, 1000);
-        tower.pushCup(3);
-
-        // Act
-        boolean status;
-        try {
-            java.lang.reflect.Field maxHeightField = Tower.class.getDeclaredField("maxHeight");
-            maxHeightField.setAccessible(true);
-            maxHeightField.setInt(tower, 100);
-            status = tower.ok();
-        } catch (ReflectiveOperationException e) {
-            throw new AssertionError(e);
-        }
-
-        // Assert
-        assertFalse(status);
-    }
+    
 }

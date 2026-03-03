@@ -7,6 +7,8 @@ import java.awt.HeadlessException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.lang.reflect.Field;
+
 
 
 
@@ -267,7 +269,7 @@ public class TowerCupsTest
         assertTrue(tower.ok());
     }
     
-    @Test
+     @Test
     public void ShouldNestInAncestorContainerWhenTopCupCannotContain() {
         // Arrange
         Tower tower = new Tower(300, 2000);
@@ -276,18 +278,46 @@ public class TowerCupsTest
         tower.pushCup(5);
         tower.pushCup(1);
         tower.pushCup(3);
+
+        Cup cup1 = getCupById(tower, 1);
+        Cup cup3 = getCupById(tower, 3);
+
         tower.pushCup(2);
-        int heightBefore = tower.height();
         tower.pushCup(4);
 
+        Cup cup4 = getCupById(tower, 4);
+
         // Assert
-        assertEquals(heightBefore, tower.height(),
-                "La taza 4 debe anidarse dentro de la taza 5 (encima de la 3) y no aumentar la altura.");
+        assertNotNull(cup1);
+        assertNotNull(cup3);
+        assertNotNull(cup4);
+        assertTrue(cup3.getY() < cup1.getY(),
+                "La taza 3 debe quedar encima de la taza 1 para no taparla visualmente.");
+        assertTrue(cup4.getY() < cup3.getY(),
+                "La taza 4 debe quedar encima de la taza 3 dentro de la taza 5.");
         assertTrue(tower.ok());
     }
     
-    
     //Métodos privados auxiliares
+    
+    private Cup getCupById(Tower tower, int id) {
+        try {
+            Field cupsField = Tower.class.getDeclaredField("cups");
+            cupsField.setAccessible(true);
+            java.util.List<Cup> cups = (java.util.List<Cup>) cupsField.get(tower);
+
+            for (Cup cup : cups) {
+                if (cup.getId() == id) {
+                    return cup;
+                }
+            }
+            return null;
+        } catch (ReflectiveOperationException e) {
+            fail("No fue posible inspeccionar las tazas de la torre en la prueba.");
+            return null;
+        }
+    }
+    
     
      private boolean containsCupId(String[][] items, String id) {
         return Arrays.stream(items)
