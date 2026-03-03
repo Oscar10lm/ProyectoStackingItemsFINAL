@@ -1236,6 +1236,10 @@ public class Tower {
         boolean canStackInsideTopCup = !topCup.hasLids() || canNestAboveInnerLid(topCup);
 
         if (targetCup == null) {
+            boolean hasElementAboveTopCup = getTopY() < topCup.getY();
+            if (hasElementAboveTopCup) {
+                return null;
+            }
             if (lidFitsInsideTopCup && canStackInsideTopCup) {
                 return topCup;
             }
