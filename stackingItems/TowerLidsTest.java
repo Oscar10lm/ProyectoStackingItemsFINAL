@@ -287,6 +287,45 @@ public class TowerLidsTest
         assertTrue(tower.ok());
     }
     
+    @Test
+    public void ShouldPopTopLid() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushLid(2);
+        tower.pushLid(6);
+
+        // Act
+        tower.popLid();
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertTrue(containsItem(items, "Lid", "2"));
+        assertFalse(containsItem(items, "Lid", "6"));
+        assertEquals(1, items.length);
+        assertTrue(tower.ok());
+    }
+
+    @Test
+    public void ShouldPopAloneLid() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(4);
+        tower.pushLid(2);
+        tower.pushLid(6);
+
+        // Act
+        tower.popLid();
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertTrue(containsItem(items, "Cup", "4"));
+        assertTrue(containsItem(items, "Lid", "2"));
+        assertFalse(containsItem(items, "Lid", "6"));
+        assertEquals(2, items.length);
+        assertTrue(tower.ok());
+    }
+    
+    
     
 
     private boolean containsItem(String[][] items, String type, String id) {

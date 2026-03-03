@@ -135,6 +135,7 @@ public class Tower {
         lid.moveTo(lidX, lidY);
         
         standaloneLids.add(lid);
+        lidInsertionOrder.add(lid);
         
         if (isVisible) lid.makeVisible();
     }
