@@ -6,6 +6,7 @@ comment1.target=Tower(int,\ int)
 comment1.text=\r\n\ Construye\ una\ torre\ con\ ancho\ visual\ y\ altura\ m\u00E1xima.\r\n
 comment10.params=o1\ o2
 comment10.target=void\ swap(java.lang.String[],\ java.lang.String[])
+comment10.text=\r\n\ Intercambio\ dos\ objetos\ de\ la\ torre\ y\ deben\ ser\ del\ mismo\ tipo.\ Sin\ cambiar\ la\ l\u00F3gica\ visual\ o\ interna.\ \r\n\r\n
 comment11.params=
 comment11.target=void\ orderTower()
 comment11.text=\r\n\ Ordena\ la\ torre\ de\ mayor\ a\ menor\ tama\u00F1o.\r\n
