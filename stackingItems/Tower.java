@@ -114,15 +114,16 @@ public class Tower {
 
             targetCup.addLid(lid);
             lidInsertionOrder.add(lid);
-
-            int lidIndex = targetCup.getLids().size() - 1;
+            int nestedLids = countNestedLids(targetCup);
+            int coverLids = countCoverLids(targetCup);
             int lidX = targetCup.getX() + ((targetCup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
             int lidY;
             if (lid.getSize() < targetCup.getSize()) {
                 int innerFloorY = targetCup.getY() + targetCup.getRealPixelHeight() - (2 * BLOCK_SIZE);
-                lidY = innerFloorY - (lidIndex * BLOCK_SIZE);
+                lidY = innerFloorY - ((nestedLids - 1) * BLOCK_SIZE);
+                
             } else {
-                lidY = targetCup.getY() - BLOCK_SIZE - (lidIndex * BLOCK_SIZE);
+                lidY = targetCup.getY() - BLOCK_SIZE - ((coverLids - 1) * BLOCK_SIZE);
             }
             lid.moveTo(lidX, lidY);
             if (isVisible) lid.makeVisible();
@@ -1122,6 +1123,28 @@ public class Tower {
         }
         return false;
     }
+    
+    private int countNestedLids(Cup cup) {
+        int nested = 0;
+        for (Lid lid : cup.getLids()) {
+            if (lid.getSize() < cup.getSize()) {
+                nested++;
+            }
+        }
+        return nested;
+    }
+
+    private int countCoverLids(Cup cup) {
+        int covers = 0;
+        for (Lid lid : cup.getLids()) {
+            if (lid.getSize() >= cup.getSize()) {
+                covers++;
+            }
+        }
+        return covers;
+    }
+    
+    
     
     
 }

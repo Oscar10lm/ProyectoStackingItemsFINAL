@@ -111,7 +111,7 @@ public class TowerLidsTest
         assertTrue(containsItem(items, "Lid", "4"));
         assertTrue(containsItem(items, "Lid", "2"));
         assertTrue(containsItem(items, "Lid", "3"));
-        assertEquals(15, tower.height());
+        assertEquals(14, tower.height());
         assertTrue(tower.ok());
     }
 
@@ -261,6 +261,32 @@ public class TowerLidsTest
                 "Una tapa interna más pequeña debe quedar sobre la tapa interna anterior.");
         assertTrue(tower.ok());
     }
+    
+    @Test
+    public void ShouldCoverCupWithNestedLids() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(4);
+        tower.pushLid(2);
+        tower.pushLid(3);
+        tower.pushLid(1);
+
+        // Act
+        tower.pushLid(4);
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertEquals(5, items.length);
+        assertTrue(containsItem(items, "Cup", "4"));
+        assertTrue(containsItem(items, "Lid", "1"));
+        assertTrue(containsItem(items, "Lid", "2"));
+        assertTrue(containsItem(items, "Lid", "3"));
+        assertTrue(containsItem(items, "Lid", "4"));
+        assertEquals(14, tower.height(),
+                "La tapa 4 debe cubrir la taza 4 sin elevarse por tapas internas.");
+        assertTrue(tower.ok());
+    }
+    
     
 
     private boolean containsItem(String[][] items, String type, String id) {

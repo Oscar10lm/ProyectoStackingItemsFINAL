@@ -94,15 +94,19 @@ public class Cup {
 
         buildCup();
 
-        for (int i = 0; i < lids.size(); i++) {
-            Lid lid = lids.get(i);
+        int nestedLids = 0;
+        int coverLids = 0;
+
+        for (Lid lid : lids) {
             int lidX = xPosition + ((size - lid.getSize()) * BLOCK_SIZE) / 2;
             int lidY;
             if (lid.getSize() < size) {
                 int innerFloorY = yPosition + getRealPixelHeight() - (2 * BLOCK_SIZE);
-                lidY = innerFloorY - (i * BLOCK_SIZE);
+                lidY = innerFloorY - (nestedLids * BLOCK_SIZE);
+                nestedLids++;
             } else {
-                lidY = yPosition - BLOCK_SIZE - (i * BLOCK_SIZE);
+                lidY = yPosition - BLOCK_SIZE - (coverLids * BLOCK_SIZE);
+                coverLids++;
             }
             lid.moveTo(lidX, lidY);
         }
