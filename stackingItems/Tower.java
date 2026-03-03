@@ -21,6 +21,8 @@ public class Tower {
     private List<Cup> cups;
     private List<Lid> standaloneLids;
     private List<Rectangle> heightMarks;
+    private List<Lid> lidInsertionOrder;
+    
     
     //Estado de la torre
        
@@ -42,6 +44,7 @@ public class Tower {
         cups = new ArrayList<>();
         heightMarks = new ArrayList<>();
         standaloneLids = new ArrayList<>();
+        lidInsertionOrder = new ArrayList<>();
         drawHeightMarks();
         isVisible = false;
     }
@@ -104,12 +107,20 @@ public class Tower {
         }
 
         if (targetCup != null) {
+            if (targetCup.hasLids()) {
+                for (Lid existingLid : targetCup.getLids()) {
+                    lidInsertionOrder.remove(existingLid);
+                }
+            }
+            
             targetCup.addLid(lid);
+            lidInsertionOrder.add(lid);
             int lidX = targetCup.getX() + ((targetCup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
             int lidY = (lid.getSize() < targetCup.getSize())
                     ? targetCup.getY() + targetCup.getRealPixelHeight() - (2 * BLOCK_SIZE)
                     : targetCup.getY() - BLOCK_SIZE;
             lid.moveTo(lidX, lidY);
+            lidInsertionOrder.add(lid);
             if (isVisible) lid.makeVisible();
             return;
         }
@@ -232,6 +243,7 @@ public class Tower {
         if (toRemove.hasLids()) {
             for (Lid lid : toRemove.getLids()) {
                 lid.makeInvisible();
+                lidInsertionOrder.remove(lid);
             }
             toRemove.getLids().clear();
         }
@@ -258,6 +270,7 @@ public class Tower {
         }
 
         cup.removeTopLid();
+        removeLastInsertedReferenceById(id);
         rebuildTower();     
         return;
     }
@@ -272,6 +285,7 @@ public class Tower {
 
 
     removed.makeInvisible();
+    lidInsertionOrder.remove(removed);
     rebuildTower();
     
     
@@ -291,7 +305,8 @@ public class Tower {
         }
 
         Cup removedCup = cups.get(cups.size() - 1);
-
+        
+        removeLidReferencesByCup(removedCup);
         removedCup.removeAllLids();
         removedCup.makeInvisible();
 
@@ -299,6 +314,33 @@ public class Tower {
 
         rebuildTower();
     }
+    
+    /**
+     * Elimina la última tapa insertada en la torre.
+     */
+    public void popLid() {
+        if (lidInsertionOrder.isEmpty()) {
+            if (isVisible) {
+                javax.swing.JOptionPane.showMessageDialog(null,
+                        "La torre no tiene tapas.");
+            }
+            return;
+        }
+
+        Lid lastInsertedLid = lidInsertionOrder.remove(lidInsertionOrder.size() - 1);
+
+        if (!standaloneLids.remove(lastInsertedLid)) {
+            for (Cup cup : cups) {
+                if (cup.getLids().remove(lastInsertedLid)) {
+                    break;
+                }
+            }
+        }
+
+        lastInsertedLid.makeInvisible();
+        rebuildTower();
+    }
+    
 
     //Reordenamiento
 
@@ -698,7 +740,7 @@ public class Tower {
         
         cups.clear();
         standaloneLids.clear();
-         
+        lidInsertionOrder.clear();
         if (heightMarks != null) {
             for (Rectangle r : heightMarks) {
                 r.makeInvisible();
@@ -815,6 +857,7 @@ public class Tower {
         
         cups.clear();
         standaloneLids.clear();
+        lidInsertionOrder.clear();
     }
 
     /**
@@ -906,6 +949,22 @@ public class Tower {
         }
         return null;
     }
+    
+    private void removeLidReferencesByCup(Cup cup) {
+        for (Lid lid : cup.getLids()) {
+            lidInsertionOrder.remove(lid);
+        }
+    }
+
+    private void removeLastInsertedReferenceById(int id) {
+        for (int i = lidInsertionOrder.size() - 1; i >= 0; i--) {
+            if (lidInsertionOrder.get(i).getId() == id) {
+                lidInsertionOrder.remove(i);
+                return;
+            }
+        }
+    }
+    
 
      private int findCupIndexById(int id) {
         for (int i = 0; i < cups.size(); i++) {
