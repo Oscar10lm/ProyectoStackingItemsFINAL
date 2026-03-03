@@ -167,20 +167,24 @@ public class Tower {
         } else {
 
             boolean topHasLid = topCup.hasLids();
-            boolean fitsInside = newCup.getSize() < topCup.getSize();
-            boolean canNestWithCurrentTop = !topHasLid
-                    || canNestAboveInnerLid(topCup);
-                if (!standaloneLids.isEmpty()) {
-                    targetY = topY - newCup.getRealPixelHeight();
-    
-                } else if (fitsInside && canNestWithCurrentTop) {
-                    targetY = getNestedTargetY(topCup, newCup);
-                    
-                } else {
+            boolean fitsInsideTop = newCup.getSize() < topCup.getSize();
+            boolean canNestWithCurrentTop = !topHasLid || canNestAboveInnerLid(topCup);
 
+            if (!standaloneLids.isEmpty()) {
+                targetY = topY - newCup.getRealPixelHeight();
+            } else if (fitsInsideTop && canNestWithCurrentTop) {
+                targetY = getNestedTargetY(topCup, newCup);
+            } else {
+                Cup ancestorContainer = findAncestorContainerFor(topCup, newCup.getSize(), cups.size() - 1);
+                if (ancestorContainer != null) {
+                    targetY = topCup.getY() - newCup.getRealPixelHeight();
+                } else {
                     targetY = topY - newCup.getRealPixelHeight();
-            }
+                }
+                
             
+        }
+        
         }
 
         int projectedHeight = BASE_Y - targetY;
@@ -719,7 +723,8 @@ public class Tower {
         int currentTopY = BASE_Y;
         Cup topCup = null;
 
-        for (Cup c : cups) {
+        for (int cupIndex = 0; cupIndex < cups.size(); cupIndex++) {
+            Cup c = cups.get(cupIndex);
             int targetX = TOWER_X - (c.getPixelWidth() / 2);
             int targetY;
 
@@ -727,16 +732,22 @@ public class Tower {
                 targetY = BASE_Y - c.getRealPixelHeight();
             } else {
                 boolean topHasLid = topCup.hasLids();
-                boolean fitsInside = c.getSize() < topCup.getSize();
-                boolean canNestWithCurrentTop = !topHasLid
-                        || canNestAboveInnerLid(topCup);
+                boolean fitsInsideTop = c.getSize() < topCup.getSize();
+                boolean canNestWithCurrentTop = !topHasLid || canNestAboveInnerLid(topCup);
+                
+                
                         
                 if (!standaloneLids.isEmpty()) {
                     targetY = currentTopY - c.getRealPixelHeight();
-                 } else if (fitsInside && canNestWithCurrentTop) {
+                 } else if (fitsInsideTop && canNestWithCurrentTop) {
                     targetY = getNestedTargetY(topCup, c);
                 } else {
-                    targetY = currentTopY - c.getRealPixelHeight();
+                    Cup ancestorContainer = findAncestorContainerFor(topCup, c.getSize(), cupIndex - 1);
+                    if (ancestorContainer != null) {
+                        targetY = topCup.getY() - c.getRealPixelHeight();
+                    } else {
+                        targetY = targetY = currentTopY - c.getRealPixelHeight();
+                    }
                 }
             }
             
@@ -1019,5 +1030,25 @@ public class Tower {
         Lid topLid = cup.getLids().get(cup.getLids().size() - 1);
         return topLid.getSize() < cup.getSize();
     }
+    
+    private Cup findAncestorContainerFor(Cup topCup, int candidateCupSize, int maxIndex) {
+        if (topCup == null || maxIndex <= 0) {
+            return null;
+        }
+
+        for (int i = maxIndex - 1; i >= 0; i--) {
+            Cup container = cups.get(i);
+            boolean topIsInsideContainer = topCup.getY() > container.getY();
+            boolean candidateFitsContainer = candidateCupSize < container.getSize();
+            boolean canNestOnContainerFloor = !container.hasLids() || canNestAboveInnerLid(container);
+
+            if (topIsInsideContainer && candidateFitsContainer && canNestOnContainerFloor) {
+                return container;
+            }
+        }
+
+        return null;
+    }
+    
     
 }

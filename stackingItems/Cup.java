@@ -34,6 +34,17 @@ public class Cup {
         this.yPosition = 0;
         buildCup();
     }
+    
+    public Cup(int id, String color) {
+        this.id = id;
+        this.color = color;
+        this.parts = new ArrayList<>();
+        this.lids = new ArrayList<>();
+        this.isVisible = false;
+        this.xPosition = 0;
+        this.yPosition = 0;
+        buildCup();
+    }
 
     /**
      * Construye la geometría de la taza en la posición actual.
