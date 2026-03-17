@@ -33,6 +33,8 @@ public class Tower {
     
     private static final int DefaultWidth = 300;
     private static final int DefaultMaxHeight = 1000;
+    
+    private static int CupsCount = 0;
 
 
     /**
@@ -84,7 +86,7 @@ public class Tower {
         
         
         int lidSize = sizeFromId(id);
-        Lid lid = new Lid(id, lidSize, getColorForSize(id));
+        Lid lid = new Lid(id, lidSize, getColorForSize());
         Cup targetCup = resolveTargetCupForLid(cup, lid);
         
         boolean addsTowerHeight = targetCup == null || lid.getSize() >= targetCup.getSize();
@@ -151,8 +153,8 @@ public class Tower {
                 return;
             }
         }
-
-        String color = getColorForSize(id);
+        if (CupsCount > 6){CupsCount = 0;}
+        String color = getColorForSize();
         Cup newCup = new Cup(id, size, color);
 
         int widthPx = newCup.getPixelWidth();
@@ -212,7 +214,8 @@ public class Tower {
         
         if (isVisible) newCup.makeVisible();
 
-        cups.add(newCup);
+        cups.add(newCup); 
+        CupsCount++;
     }
 
     //Eliminación de elementos
@@ -1032,9 +1035,10 @@ public class Tower {
     /**
      * Retorna un color asociado al tamaño.
      */
-    private String getColorForSize(int s) {
+    private String getColorForSize() {
         String[] colors = {"red", "blue", "green", "yellow", "magenta", "black"};
-        return colors[s % colors.length];
+        
+        return colors[CupsCount];
     }
     
     private boolean lidExistsInTower(int id) {
