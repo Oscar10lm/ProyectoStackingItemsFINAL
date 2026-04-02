@@ -26,14 +26,33 @@ public class Rectangle{
      * Create a new rectangle at default position with default color.
      */
     public Rectangle(){
-        height = 30;
-        width = 40;
+        height = 25;
+        width = 25;
+        xPosition = 0;
+        yPosition = 0;
+        color = "magenta";
+        isVisible = false;
+    }
+    
+    public Rectangle(int perimeter){
+        int side = perimeter / 4;
+        
+        height = side;
+        width = side;
         xPosition = 70;
         yPosition = 15;
         color = "magenta";
         isVisible = false;
     }
-    
+    /**
+     * Reset the size of the rectangle to its default values.
+     */
+    public void resetSize(){
+        height = 30;
+        width = 40;
+        draw();
+    }
+
 
     /**
      * Make this rectangle visible. If it was already visible, do nothing.
@@ -139,17 +158,58 @@ public class Rectangle{
         }
     }
 
+    public int perimeter(){
+        int suma = width + height;
+        
+        return 2 * suma;
+    }
+    
+    public void zoom(char z) {
+        if (z == '+'){
+            width = width * 2;
+            height = height * 2;
+        }
+        
+        else if(z == '-'){
+            width = width / 2;
+            height = height /2;
+        }
+        draw();
+    }
+    
+    public void walk(int times){
+        int steps = Math.abs(times);
+        
+        for (int i = 0; i < steps; i++){
+            if(times > 0) {
+                moveRight();
+            }else{
+                moveLeft();
+            }
+            moveDown();
+            }
+        }
+    
+    
     /**
      * Change the size to the new size
      * @param newHeight the new height in pixels. newHeight must be >=0.
      * @param newWidht the new width in pixels. newWidth must be >=0.
      */
-    public void changeSize(int newHeight, int newWidth) {
-        erase();
-        height = newHeight;
-        width = newWidth;
-        draw();
+     public void changeSize(int newHeight, int newWidth) {
+ 
+        if (newHeight < 0 || newWidth < 0) {
+            System.out.println("Error, valor negativo no permitido");
+            
+        } else { 
+            erase();
+            height = newHeight;
+            width = newWidth;
+            draw();
+        
+        }         
     }
+
     
     /**
      * Change the color. 
