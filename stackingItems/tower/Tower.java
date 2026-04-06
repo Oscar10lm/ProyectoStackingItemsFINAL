@@ -10,7 +10,7 @@ import java.util.List;
  * ordenamiento y representación visual.
  * @author Juan Gaitán and Oscar Lasso
  */
-public class Tower {
+public class Tower implements StackingCups {
 
     //Constantes de posicionamiento
 
@@ -592,6 +592,34 @@ public class Tower {
         return (currentHeight - bestHeight) >= 1 ? bestSwap : new String[0][0];
     }
     
+    
+    /**
+     * Genera una configuración objetivo de alturas para n tazas y altura h.
+     * Delega en el algoritmo del contrato StackingCups.
+     */
+    public List<Integer> targetConfiguration(int n, int h) {
+        return algorithmStackingCups(n, h);
+    }
+
+    /**
+     * Construye la torre a partir de una lista de alturas (2*id-1).
+     * Limpia la torre actual y agrega las tazas en el orden dado.
+     */
+    public void rebuildFromHeights(List<Integer> heights) {
+        clearTowerVisual();
+        if (heights == null) {
+            return;
+        }
+
+        for (Integer height : heights) {
+            if (height == null || height <= 0 || (height % 2 == 0)) {
+                continue;
+            }
+            int id = (height + 1) / 2;
+            pushCup(id);
+        }
+    }
+
     // Consultas
 
     /**
