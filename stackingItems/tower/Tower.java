@@ -10,7 +10,7 @@ import java.util.List;
  * ordenamiento y representación visual.
  * @author Juan Gaitán and Oscar Lasso
  */
-public class Tower implements StackingCups {
+public class Tower implements StackingCups, TowerMutation, TowerOrdering, TowerInfo {
 
     //Constantes de posicionamiento
 

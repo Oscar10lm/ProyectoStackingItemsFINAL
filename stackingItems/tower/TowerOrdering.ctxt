@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=TowerOrdering
+comment0.text=\r\n\ Operaciones\ de\ reorganizaci\u00F3n\ y\ ordenamiento\ de\ la\ torre.\r\n
+comment1.params=
+comment1.target=void\ orderTower()
+comment2.params=
+comment2.target=void\ reverseTower()
+comment3.params=o1\ o2
+comment3.target=void\ swap(java.lang.String[],\ java.lang.String[])
+comment4.params=
+comment4.target=void\ cover()
+numComments=5
