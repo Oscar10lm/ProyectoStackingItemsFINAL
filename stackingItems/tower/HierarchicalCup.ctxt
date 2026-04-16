@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=HierarchicalCup
+comment0.text=\r\n\ Taza\ que\ desplaza\ objetos\ de\ menor\ tamano\ y\ puede\ bloquearse\ en\ la\ base.\r\n
+comment1.params=id\ size\ color
+comment1.target=HierarchicalCup(int,\ int,\ java.lang.String)
+comment2.params=
+comment2.target=boolean\ shouldDisplaceSmallerItems()
+comment3.params=
+comment3.target=boolean\ isLockedAtBase()
+comment4.params=
+comment4.target=void\ lockAtBase()
+numComments=5

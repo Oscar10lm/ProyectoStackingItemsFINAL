@@ -1,10 +1,12 @@
 package tower;
 
+ 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 /**
- * Write a description of class TowerContest here.
+ * Clase de TowerContest 
  * 
  * @author (your name) 
  * @version (a version number or a date)

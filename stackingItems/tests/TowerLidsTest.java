@@ -218,6 +218,53 @@ public class TowerLidsTest
     }
 
     @Test
+    public void ShouldNotAddFearfulLidWithoutCompanionCup() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+
+        // Act
+        tower.pushLid(3, "fearful");
+
+        // Assert
+        assertEquals(0, tower.stackingItems().length);
+        assertTrue(tower.ok());
+    }
+
+    @Test
+    public void ShouldNotRemoveFearfulLidWhenCoveringCompanionCup() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(3);
+        tower.pushLid(3, "fearful");
+
+        // Act
+        tower.removeLid(3);
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertTrue(containsItem(items, "Lid", "3"));
+        assertTrue(tower.ok());
+    }
+
+    @Test
+    public void ShouldPlaceCrazyLidAsBase() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(3);
+        int previousHeight = tower.height();
+
+        // Act
+        tower.pushLid(3, "crazy");
+
+        // Assert
+        assertEquals(previousHeight + 1, tower.height(),
+                "La tapa crazy debe actuar como base y aumentar la altura total en un bloque.");
+        assertEquals(0, tower.liddedCups().length,
+                "La tapa crazy no debe contar como tapa de su taza companera.");
+        assertTrue(tower.ok());
+    }
+
+    @Test
     public void ShouldKeepConsistentLidAndCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);

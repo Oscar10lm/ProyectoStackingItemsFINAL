@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.target=CrazyLid
+comment0.text=\r\n\ Tapa\ que\ se\ usa\ como\ base\ de\ la\ torre.\r\n
+comment1.params=id\ size\ color
+comment1.target=CrazyLid(int,\ int,\ java.lang.String)
+comment2.params=
+comment2.target=boolean\ prefersBasePlacement()
+numComments=3

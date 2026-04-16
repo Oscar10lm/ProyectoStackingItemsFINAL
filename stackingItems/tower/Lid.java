@@ -1,5 +1,7 @@
 package tower;
 
+ 
+
 import shapes.Rectangle;
 
 /**
@@ -24,5 +26,26 @@ public class Lid extends StackingItem {
             Rectangle r = buildBlock(getX() + (i * BLOCK_SIZE), getY());
             parts.add(r);
         }
+    }
+
+    /**
+     * Indica si la tapa exige que exista su taza companera.
+     */
+    public boolean requiresCompanionCup() {
+        return false;
+    }
+
+    /**
+     * Indica si la tapa no se puede retirar cuando tapa a su taza.
+     */
+    public boolean blocksRemovalFromCompanionCup(Cup cup) {
+        return false;
+    }
+
+    /**
+     * Indica si la tapa debe ubicarse como base de la torre.
+     */
+    public boolean prefersBasePlacement() {
+        return false;
     }
 }

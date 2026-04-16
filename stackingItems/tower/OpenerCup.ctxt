@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.target=OpenerCup
+comment0.text=\r\n\ Taza\ que\ elimina\ tapas\ que\ le\ impiden\ el\ paso\ al\ entrar.\r\n
+comment1.params=id\ size\ color
+comment1.target=OpenerCup(int,\ int,\ java.lang.String)
+comment2.params=
+comment2.target=boolean\ shouldClearBlockingLids()
+numComments=3

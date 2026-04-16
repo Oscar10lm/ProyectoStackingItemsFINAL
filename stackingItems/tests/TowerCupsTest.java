@@ -253,6 +253,40 @@ public class TowerCupsTest
         assertEquals(0, tower.height());
         assertTrue(tower.ok());
     }
+
+    @Test
+    public void ShouldCreateOpenerCupAndClearBlockingLids() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(4);
+        tower.pushLid(4);
+
+        // Act
+        tower.pushCup(3, "opener");
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertFalse(Arrays.stream(items)
+                .anyMatch(item -> "Lid".equals(item[0]) && "4".equals(item[1])),
+                "La taza opener debe eliminar tapas que bloquean su paso.");
+        assertTrue(tower.ok());
+    }
+
+    @Test
+    public void ShouldNotRemoveHierarchicalCupWhenLockedAtBase() {
+        // Arrange
+        Tower tower = new Tower(300, 1000);
+        tower.pushCup(4, "hierarchical");
+
+        // Act
+        tower.removeCup(4);
+
+        // Assert
+        String[][] items = tower.stackingItems();
+        assertTrue(Arrays.stream(items)
+                .anyMatch(item -> "Cup".equals(item[0]) && "4".equals(item[1])),
+                "Una taza hierarchical en la base no debe poder retirarse.");
+    }
     
      @Test
     public void ShouldNestCupWhenTopIsInnerLid() {

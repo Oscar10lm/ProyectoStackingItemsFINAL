@@ -1,5 +1,7 @@
 package tower;
 
+ 
+
 import java.util.ArrayList;
 import shapes.Rectangle;
 
@@ -126,5 +128,34 @@ public class Cup extends StackingItem {
 
     public int getPixelWidth() {
         return getSize() * BLOCK_SIZE;
+    }
+
+    /**
+     * Indica si esta taza elimina tapas bloqueantes al entrar.
+     */
+    public boolean shouldClearBlockingLids() {
+        return false;
+    }
+
+    /**
+     * Indica si esta taza desplaza objetos de menor tamano.
+     */
+    public boolean shouldDisplaceSmallerItems() {
+        return false;
+    }
+
+    /**
+     * Indica si esta taza no puede retirarse de la torre.
+     */
+    public boolean isLockedAtBase() {
+        return false;
+    }
+
+    /**
+     * Marca la taza como bloqueada en la base.
+     * En la taza normal no hace nada.
+     */
+    public void lockAtBase() {
+        // Hook polimorfico.
     }
 }
