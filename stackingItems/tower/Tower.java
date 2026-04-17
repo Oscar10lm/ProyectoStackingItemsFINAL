@@ -279,14 +279,7 @@ public class Tower implements StackingCups {
      */
     public void removeCup(int id) {
 
-        Cup toRemove = null;
-
-        for (Cup c : cups) {
-            if (c.getId() == id) {
-                toRemove = c;
-                break;
-            }
-        }
+        Cup toRemove = getCupById(id);
 
         if (toRemove == null) {
             if (isVisible) {
@@ -441,9 +434,6 @@ public class Tower implements StackingCups {
     public void reverseTower() {
 
          if (cups.isEmpty() && standaloneLids.isEmpty()) return;
-
-        ArrayList<Cup> original = new ArrayList<>(cups);
-        ArrayList<Lid> originalStandalone = new ArrayList<>(standaloneLids);
         
         Collections.reverse(cups);
         
@@ -711,22 +701,7 @@ public class Tower implements StackingCups {
      */
     public int height() {
 
-        if (cups.isEmpty() && standaloneLids.isEmpty()) return 0;
-        int topY = BASE_Y;
-
-        for (Cup c : cups) {
-            if (c.getY() < topY) topY = c.getY();
-            for (Lid lid : c.getLids()) {
-                if (lid.getY() < topY) topY = lid.getY();
-            }
-        }
-        
-        for (Lid lid : standaloneLids) {
-            if (lid.getY() < topY) topY = lid.getY();
-        }
-        
-
-        return (BASE_Y - topY) / BLOCK_SIZE;
+        return getCurrentHeight() / BLOCK_SIZE;
     }
 
     /**
@@ -734,24 +709,10 @@ public class Tower implements StackingCups {
      */
     public int getCurrentHeight() {
 
-        if (cups.isEmpty() && standaloneLids.isEmpty()) return 0;
-
-        int topY = BASE_Y;
-
-        for (Cup c : cups) {
-            if (c.getY() < topY) topY = c.getY();
-            for (Lid lid : c.getLids()) {
-                if (lid.getY() < topY) topY = lid.getY();
-            }
+        int topY = findTopElementY();
+        return topY == BASE_Y ? 0 : BASE_Y - topY;
         }
-        
-         for (Lid lid : standaloneLids) {
-            if (lid.getY() < topY) topY = lid.getY();
-        }
-
     
-        return BASE_Y - topY;
-    }
 
     /**
      * Retorna los identificadores de tazas con tapas.
@@ -951,7 +912,7 @@ public class Tower implements StackingCups {
                             targetY = getNestedTargetY(ancestorContainer, c);
                         }
                     } else {
-                        targetY = targetY = currentTopY - c.getRealPixelHeight();
+                        targetY = currentTopY - c.getRealPixelHeight();
                     }
                 }
             }
@@ -1061,19 +1022,23 @@ public class Tower implements StackingCups {
      * Retorna la coordenada superior más alta.
      */
     private int getTopY() {
+        return findTopElementY();
+    }
 
+    private int findTopElementY() {
         int top = BASE_Y;
 
-        for (Cup c : cups) {
-            if (c.getY() < top) top = c.getY();
-            for (Lid lid : c.getLids()) {
-                if (lid.getY() < top) top = lid.getY();
+        for (Cup cup : cups) {
+            top = Math.min(top, cup.getY());
+            for (Lid lid : cup.getLids()) {
+                top = Math.min(top, lid.getY());
             }
         }
-        
+
         for (Lid lid : standaloneLids) {
-            if (lid.getY() < top) top = lid.getY();
+            top = Math.min(top, lid.getY());
         }
+
         
         return top;
     }
