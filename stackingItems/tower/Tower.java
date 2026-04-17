@@ -102,8 +102,25 @@ public class Tower implements StackingCups {
 
         if (lid.requiresCompanionCup() && cup == null) {
             if (isVisible) {
+                String lidType = normalizeType(type);
                 javax.swing.JOptionPane.showMessageDialog(null,
-                        "La tapa de tipo fearful requiere que exista su taza companera.");
+                        "La tapa de tipo " + lidType + " requiere que exista su taza companera.");
+            }
+            return;
+        }
+
+        if (lid.prefersUnderCupPlacement()) {
+            standaloneLids.add(lid);
+            lidInsertionOrder.add(lid);
+            rebuildTower();
+            if (getCurrentHeight() > maxHeight) {
+                standaloneLids.remove(lid);
+                lidInsertionOrder.remove(lid);
+                rebuildTower();
+                if (isVisible) {
+                    javax.swing.JOptionPane.showMessageDialog(null,
+                            "No cabe la tapa, supera la altura maxima.");
+                }
             }
             return;
         }
@@ -168,6 +185,10 @@ public class Tower implements StackingCups {
             lid.makeVisible();
         }
         lidsCount++;
+        
+        if (lidsCount > 6){
+            lidsCount = 0;
+        } 
     }
     
 
@@ -269,6 +290,10 @@ public class Tower implements StackingCups {
         rebuildTower();
         refreshHierarchicalLocks();
         CupsCount++;
+        
+        if (CupsCount > 6){
+            CupsCount = 0;
+        } 
     }
 
     //Eliminación de elementos
@@ -869,7 +894,7 @@ public class Tower implements StackingCups {
         int baseLidsCount = countBaseLids();
         int currentBaseY = BASE_Y;
         for (Lid lid : standaloneLids) {
-            if (!lid.prefersBasePlacement()) {
+            if (!lid.prefersBasePlacement()|| lid.prefersUnderCupPlacement()) {
                 continue;
             }
             int lidX = TOWER_X - ((lid.getSize() * BLOCK_SIZE) / 2);
@@ -917,6 +942,10 @@ public class Tower implements StackingCups {
                 }
             }
             
+            if (hasUnderCupLid(c)) {
+                targetY -= BLOCK_SIZE;
+            }
+            
             c.moveTo(targetX, targetY);
             
             if (isVisible) c.makeVisible();
@@ -933,7 +962,25 @@ public class Tower implements StackingCups {
             topCup = c;
         }
         for (Lid lid : standaloneLids) {
-            if (lid.prefersBasePlacement()) {
+            if (!lid.prefersUnderCupPlacement()) {
+                continue;
+            }
+
+            Cup companionCup = getCupById(lid.getId());
+            if (companionCup == null) {
+                continue;
+            }
+
+            int lidX = companionCup.getX() + ((companionCup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
+            int lidY = companionCup.getY() + companionCup.getRealPixelHeight();
+            lid.moveTo(lidX, lidY);
+            if (isVisible) {
+                lid.makeVisible();
+            }
+        }
+
+        for (Lid lid : standaloneLids) {
+            if (lid.prefersBasePlacement() || lid.prefersUnderCupPlacement()) {
                 continue;
             }
             int lidX = TOWER_X - ((lid.getSize() * BLOCK_SIZE) / 2);
@@ -1173,11 +1220,21 @@ public class Tower implements StackingCups {
     }
 
     private void clearBlockingLidsFor(Cup openerCup) {
+        boolean blockedByFearful = false;
+
         ArrayList<Lid> removedStandalone = new ArrayList<>();
         for (Lid lid : standaloneLids) {
-            if (!lid.prefersBasePlacement() && lid.getSize() >= openerCup.getSize()) {
-                removedStandalone.add(lid);
+            if (lid.prefersBasePlacement() || lid.prefersUnderCupPlacement() || lid.getSize() < openerCup.getSize()) {
+                continue;
             }
+
+            Cup companionCup = getCupById(lid.getId());
+            if (companionCup != null && lid.blocksRemovalFromCompanionCup(companionCup)) {
+                blockedByFearful = true;
+                continue;
+            }
+
+            removedStandalone.add(lid);
         }
         for (Lid lid : removedStandalone) {
             lid.makeInvisible();
@@ -1188,15 +1245,25 @@ public class Tower implements StackingCups {
         for (Cup cup : cups) {
             ArrayList<Lid> removedFromCup = new ArrayList<>();
             for (Lid lid : cup.getLids()) {
-                if (lid.getSize() >= openerCup.getSize()) {
-                    removedFromCup.add(lid);
+                if (lid.getSize() < openerCup.getSize()) {
+                    continue;
                 }
+                if (lid.blocksRemovalFromCompanionCup(cup)) {
+                    blockedByFearful = true;
+                    continue;
+                }
+                removedFromCup.add(lid);
             }
             for (Lid lid : removedFromCup) {
                 lid.makeInvisible();
                 cup.getLids().remove(lid);
                 lidInsertionOrder.remove(lid);
             }
+        }
+
+        if (blockedByFearful && isVisible) {
+            javax.swing.JOptionPane.showMessageDialog(null,
+                    "No es posible retirar la tapa, es de tipo fearful.");
         }
     }
 
@@ -1317,15 +1384,12 @@ public class Tower implements StackingCups {
     
     
      private int getNestedTargetY(Cup containerCup, Cup nestedCup) {
-        int supportY = containerCup.getY() + containerCup.getRealPixelHeight() - BLOCK_SIZE;
-
-         if (containerCup.shouldDisplaceSmallerItems()) {
-            supportY = containerCup.getY() + containerCup.getRealPixelHeight();
-        }
+        int baseSupportY = containerCup.getY() + containerCup.getRealPixelHeight() - BLOCK_SIZE;
+        int supportY = baseSupportY;
         
         if (canNestAboveInnerLid(containerCup)) {
             Lid innerLid = containerCup.getLids().get(containerCup.getLids().size() - 1);
-            supportY = innerLid.getY();
+            supportY = Math.min(baseSupportY, innerLid.getY());
         }
 
         return supportY - nestedCup.getRealPixelHeight();
@@ -1361,7 +1425,7 @@ public class Tower implements StackingCups {
     
      private boolean hasStandaloneLidAtTop(int topY) {
         for (Lid lid : standaloneLids) {
-            if (!lid.prefersBasePlacement() && lid.getY() == topY) {
+            if (!lid.prefersBasePlacement() && !lid.prefersUnderCupPlacement() && lid.getY() == topY) {
                 return true;
             }
         }
@@ -1386,6 +1450,15 @@ public class Tower implements StackingCups {
             }
         }
         return covers;
+    }
+    
+    private boolean hasUnderCupLid(Cup cup) {
+        for (Lid lid : standaloneLids) {
+            if (lid.prefersUnderCupPlacement() && lid.getId() == cup.getId()) {
+                return true;
+            }
+        }
+        return false;
     }
     
      private int getStackedAboveCupY(Cup supportCup, Cup newCup) {

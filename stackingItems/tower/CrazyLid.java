@@ -1,7 +1,7 @@
 package tower;
 
 /**
- * Tapa que se usa como base de la torre.
+ * Tapa que se ubica debajo de su taza companera.
  */
 public class CrazyLid extends Lid {
 
@@ -10,7 +10,12 @@ public class CrazyLid extends Lid {
     }
 
     @Override
-    public boolean prefersBasePlacement() {
+    public boolean requiresCompanionCup() {
+        return true;
+    }
+
+    @Override
+    public boolean prefersUnderCupPlacement() {
         return true;
     }
 }

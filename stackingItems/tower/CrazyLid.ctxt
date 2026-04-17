@@ -1,8 +1,10 @@
 #BlueJ class context
 comment0.target=CrazyLid
-comment0.text=\r\n\ Tapa\ que\ se\ usa\ como\ base\ de\ la\ torre.\r\n
+comment0.text=\r\n\ Tapa\ que\ se\ ubica\ debajo\ de\ su\ taza\ companera.\r\n
 comment1.params=id\ size\ color
 comment1.target=CrazyLid(int,\ int,\ java.lang.String)
 comment2.params=
-comment2.target=boolean\ prefersBasePlacement()
-numComments=3
+comment2.target=boolean\ requiresCompanionCup()
+comment3.params=
+comment3.target=boolean\ prefersUnderCupPlacement()
+numComments=4

@@ -48,4 +48,11 @@ public class Lid extends StackingItem {
     public boolean prefersBasePlacement() {
         return false;
     }
+    
+    /**
+     * Indica si la tapa debe ubicarse debajo de la taza companera.
+     */
+    public boolean prefersUnderCupPlacement() {
+        return false;
+    }
 }
