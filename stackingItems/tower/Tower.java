@@ -1207,7 +1207,7 @@ public class Tower implements StackingCups {
         }
 
         ArrayList<Cup> displaced = new ArrayList<>();
-        for (int i = index - 1; i >= 0; i--) {
+        for (int i = 0; i < index; i++) {
             Cup existing = cups.get(i);
             if (existing.getSize() < hierarchicalCup.getSize()) {
                 displaced.add(existing);
@@ -1319,6 +1319,10 @@ public class Tower implements StackingCups {
      private int getNestedTargetY(Cup containerCup, Cup nestedCup) {
         int supportY = containerCup.getY() + containerCup.getRealPixelHeight() - BLOCK_SIZE;
 
+         if (containerCup.shouldDisplaceSmallerItems()) {
+            supportY = containerCup.getY() + containerCup.getRealPixelHeight();
+        }
+        
         if (canNestAboveInnerLid(containerCup)) {
             Lid innerLid = containerCup.getLids().get(containerCup.getLids().size() - 1);
             supportY = innerLid.getY();
