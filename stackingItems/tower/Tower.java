@@ -227,7 +227,11 @@ public class Tower implements StackingCups {
         if (newCup.shouldClearBlockingLids()) {
             clearBlockingLidsFor(newCup);
         }
-
+        
+        if (newCup.shouldPurgeSmallerItems()) {
+            purgeSmallerItemsFor(newCup);
+        }
+    
         int widthPx = newCup.getPixelWidth();
         int targetX = TOWER_X - (widthPx / 2);
         int targetY;
@@ -1198,6 +1202,10 @@ public class Tower implements StackingCups {
         if ("hierarchical".equals(normalizedType)) {
             return new HierarchicalCup(id, size, color);
         }
+        if ("iron".equals(normalizedType)) {
+            return new IronCup(id, size, color);
+        }
+        
         return new Cup(id, size, color);
     }
 
@@ -1219,6 +1227,48 @@ public class Tower implements StackingCups {
         return type.trim().toLowerCase();
     }
 
+    private void purgeSmallerItemsFor(Cup ironCup) {
+        ArrayList<Cup> removedCups = new ArrayList<>();
+        for (Cup cup : cups) {
+            if (cup.getSize() < ironCup.getSize() && !cup.isIronCup()) {
+                removedCups.add(cup);
+            }
+        }
+
+        for (Cup cup : removedCups) {
+            removeLidReferencesByCup(cup);
+            cup.removeAllLids();
+            cup.makeInvisible();
+            cups.remove(cup);
+        }
+
+        ArrayList<Lid> removedStandalone = new ArrayList<>();
+        for (Lid lid : standaloneLids) {
+            if (lid.getSize() < ironCup.getSize()) {
+                removedStandalone.add(lid);
+            }
+        }
+        for (Lid lid : removedStandalone) {
+            lid.makeInvisible();
+            standaloneLids.remove(lid);
+            lidInsertionOrder.remove(lid);
+        }
+
+        for (Cup cup : cups) {
+            ArrayList<Lid> removedFromCup = new ArrayList<>();
+            for (Lid lid : cup.getLids()) {
+                if (lid.getSize() < ironCup.getSize()) {
+                    removedFromCup.add(lid);
+                }
+            }
+            for (Lid lid : removedFromCup) {
+                lid.makeInvisible();
+                cup.getLids().remove(lid);
+                lidInsertionOrder.remove(lid);
+            }
+        }
+    }
+    
     private void clearBlockingLidsFor(Cup openerCup) {
         boolean blockedByFearful = false;
 

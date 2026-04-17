@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=IronCup
+comment0.text=\r\n\ Taza\ que\ elimina\ elementos\ menores\ al\ colocarse,\r\n\ excepto\ otras\ tazas\ de\ tipo\ iron.\r\n
+comment1.params=id\ size\ color
+comment1.target=IronCup(int,\ int,\ java.lang.String)
+comment2.params=
+comment2.target=boolean\ shouldPurgeSmallerItems()
+comment3.params=
+comment3.target=boolean\ isIronCup()
+numComments=4

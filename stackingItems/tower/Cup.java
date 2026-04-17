@@ -143,7 +143,21 @@ public class Cup extends StackingItem {
     public boolean shouldDisplaceSmallerItems() {
         return false;
     }
+    
+    /**
+     * Indica si esta taza elimina elementos menores al entrar.
+     */
+    public boolean shouldPurgeSmallerItems() {
+        return false;
+    }
 
+    /**
+     * Indica si esta taza es de tipo iron.
+     */
+    public boolean isIronCup() {
+        return false;
+    }
+    
     /**
      * Indica si esta taza no puede retirarse de la torre.
      */
