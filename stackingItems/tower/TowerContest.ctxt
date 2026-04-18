@@ -2,9 +2,11 @@
 comment0.target=TowerContest
 comment0.text=\r\n\ Clase\ de\ TowerContest\ \r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
 comment1.params=n\ h
-comment1.target=java.lang.String\ solve(int,\ int)
+comment1.target=java.util.List\ algorithmStackingCups(int,\ int)
 comment2.params=n\ h
-comment2.target=java.util.List\ solveList(int,\ int)
+comment2.target=java.lang.String\ solve(int,\ int)
 comment3.params=n\ h
-comment3.target=void\ simulate(int,\ int)
-numComments=4
+comment3.target=java.util.List\ solveList(int,\ int)
+comment4.params=n\ h
+comment4.target=void\ simulate(int,\ int)
+numComments=5

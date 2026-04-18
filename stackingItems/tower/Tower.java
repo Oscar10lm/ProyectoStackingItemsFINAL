@@ -12,7 +12,7 @@ import java.util.List;
  * ordenamiento y representación visual.
  * @author Juan Gaitán and Oscar Lasso
  */
-public class Tower implements StackingCups {
+public class Tower {
 
     //Constantes de posicionamiento
 
@@ -701,7 +701,7 @@ public class Tower implements StackingCups {
      * Delega en el algoritmo del contrato StackingCups.
      */
     public List<Integer> targetConfiguration(int n, int h) {
-        return algorithmStackingCups(n, h);
+        return TowerContest.algorithmStackingCups(n, h);
     }
 
     /**

@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.target=TowerContestTest
+comment0.text=\r\n\ Pruebas\ unitarias\ para\ TowerContest.\r\n\ Enfoque\ agil/XP\:\ pruebas\ pequenas,\ claras\ y\ centradas\ en\ comportamiento\ esencial.\r\n
+comment1.params=
+comment1.target=void\ shouldSolveWhenConfigurationIsPossible()
+comment2.params=
+comment2.target=void\ shouldSolveAtMaximumHeight()
+comment3.params=
+comment3.target=void\ shouldSolveTrivialCaseWithOneCup()
+comment4.params=
+comment4.target=void\ shouldntSolveWhenHeightIsBelowMinimum()
+comment5.params=
+comment5.target=void\ shouldntSolveWhenHeightIsAboveMaximum()
+numComments=6
