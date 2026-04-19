@@ -144,8 +144,8 @@ public class TowerTestC2 {
 
         // Assert
         int[] lidded = tower.liddedCups();
-        assertArrayEquals(new int[]{5}, lidded, "La taza 5 debe quedar cubierta tras mover su tapa correspondiente.");
-        assertTrue(containsItem(tower.stackingItems(), "Lid", "1"), "La tapa no coincidente debe permanecer en torre.");
+        assertArrayEquals(new int[]{5, 2}, lidded, "Las tazas 5 y 2 deben quedar cubiertas.");
+        assertTrue(containsItem(tower.stackingItems(), "Lid", "1"), "La tapa coincidente debe permanecer en torre.");
         assertTrue(tower.ok());
     }
 

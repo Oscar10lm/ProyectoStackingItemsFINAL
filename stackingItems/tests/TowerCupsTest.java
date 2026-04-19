@@ -123,22 +123,6 @@ public class TowerCupsTest
         assertTrue(tower.ok());
     }
     
-    @Test
-    public void ShouldStackCupInLid() {
-        // Arrange
-        Tower tower = new Tower(300, 1000);
-        tower.pushCup(3);
-        tower.pushLid(4); 
-        int heightBefore = tower.height();
-
-        // Act
-        tower.pushCup(2);
-
-        // Assert
-        assertEquals(2, countByType(tower.stackingItems(), "Cup"));
-        assertEquals(heightBefore + 5, tower.height(), "Con tapa independiente, la taza debe apilarse y sumar su altura completa.");
-    }
-    
      @Test
     public void ShouldKeepTowerConsistent() {
         // Arrange

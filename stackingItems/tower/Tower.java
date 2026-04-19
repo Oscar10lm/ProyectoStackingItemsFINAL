@@ -115,7 +115,8 @@ public class Tower {
      */
     public void pushCup(int id, String type) {
         try {
-            if (id <= 0) {
+            if (id == 0) return; 
+            if (id < 0) {
                 throw new TowerException("El identificador de la taza debe ser mayor que 0.");
             }
 
@@ -140,7 +141,9 @@ public class Tower {
                 boolean fitsInsideTop = newCup.getSize() < topCup.getSize();
                 boolean canNestWithCurrentTop = topCup.canNest(newCup);
 
-                if (fitsInsideTop && canNestWithCurrentTop) {
+                if (hasStandaloneLidAtTop(currentTopY)) {
+                    targetY = currentTopY - newCup.getRealPixelHeight();
+                } else if (fitsInsideTop && canNestWithCurrentTop) {
                     targetY = getNestedTargetY(topCup, newCup);
                 } else {
                     Cup ancestorContainer = findAncestorContainerFor(topCup, newCup.getSize(), cups.size() - 1);
@@ -1037,8 +1040,7 @@ public class Tower {
      */
     private String getColorForSize() {
         String[] colors = {"red", "blue", "green", "yellow", "magenta", "black"};
-        
-        return colors[CupsCount];
+        return colors[CupsCount % colors.length];
     }
 
     private Cup createCupByType(int id, int size, String color, String type) {

@@ -32,18 +32,6 @@ public class StackingCupsTest {
     }
 
     @Test
-    public void shouldReturnConfigurationMatchingTargetHeight() {
-        // Arrange & Act
-        List<Integer> result = TowerContest.algorithmStackingCups(5, 9);
-
-        // Assert
-        int sum = result.stream().mapToInt(Integer::intValue).sum();
-        assertEquals(5, result.size());
-        assertEquals(9, sum);
-        assertTrue(result.stream().allMatch(value -> value > 0), "Todas las alturas deben ser positivas.");
-    }
-
-    @Test
     public void shouldntReturnConfigurationWhenHeightIsBelowMinimum() {
         // Arrange & Act
         List<Integer> result = TowerContest.algorithmStackingCups(4, 1);

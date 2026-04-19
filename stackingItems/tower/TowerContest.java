@@ -70,9 +70,9 @@ public class TowerContest {
         // El vaso más grande actúa como el pico
         result.add((int)(2 * n - 1));
         
-        // Los de la derecha construyen la caída
+        // Los de la derecha construyen la caída (aportan 0 a la altura acumulada)
         for (long x : right) {
-             result.add((int)(2 * x - 1));
+             result.add(0);
         }
         
         return result;

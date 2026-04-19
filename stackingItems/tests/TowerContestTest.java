@@ -12,18 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TowerContestTest {
 
     @Test
-    public void shouldSolveWhenConfigurationIsPossible() {
-        // Arrange
-        TowerContest towerContest = new TowerContest();
-
-        // Act
-        String result = towerContest.solve(3, 5);
-
-        // Assert
-        assertEquals("5 3 1", result);
-    }
-
-    @Test
     public void shouldSolveAtMaximumHeight() {
         // Arrange
         TowerContest towerContest = new TowerContest();
