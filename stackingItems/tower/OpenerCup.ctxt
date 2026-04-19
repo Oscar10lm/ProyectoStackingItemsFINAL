@@ -5,4 +5,6 @@ comment1.params=id\ size\ color
 comment1.target=OpenerCup(int,\ int,\ java.lang.String)
 comment2.params=
 comment2.target=boolean\ shouldClearBlockingLids()
-numComments=3
+comment3.params=tower
+comment3.target=void\ applyPreStackEffect(Tower)
+numComments=4

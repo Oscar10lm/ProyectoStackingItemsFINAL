@@ -109,4 +109,19 @@ public abstract class StackingItem {
     public boolean isVisible() {
         return visible;
     }
+
+    /**
+     * Aplica efectos antes de ser apilado en la torre.
+     */
+    public abstract void applyPreStackEffect(Tower tower);
+
+    /**
+     * Aplica efectos despues de ser apilado en la torre.
+     */
+    public abstract void applyPostStackEffect(Tower tower);
+
+    /**
+     * Verifica si el elemento puede ser retirado de la torre.
+     */
+    public abstract boolean canBeRemoved(Tower tower);
 }

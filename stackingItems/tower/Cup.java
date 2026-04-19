@@ -172,4 +172,19 @@ public class Cup extends StackingItem {
     public void lockAtBase() {
         // Hook polimorfico.
     }
+
+    @Override
+    public void applyPreStackEffect(Tower tower) {
+        // Implementación por defecto: sin efecto previo.
+    }
+
+    @Override
+    public void applyPostStackEffect(Tower tower) {
+        // Implementación por defecto: sin efecto posterior.
+    }
+
+    @Override
+    public boolean canBeRemoved(Tower tower) {
+        return !isLockedAtBase();
+    }
 }

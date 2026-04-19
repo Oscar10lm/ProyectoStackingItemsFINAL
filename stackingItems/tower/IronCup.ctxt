@@ -7,4 +7,6 @@ comment2.params=
 comment2.target=boolean\ shouldPurgeSmallerItems()
 comment3.params=
 comment3.target=boolean\ isIronCup()
-numComments=4
+comment4.params=tower
+comment4.target=void\ applyPreStackEffect(Tower)
+numComments=5

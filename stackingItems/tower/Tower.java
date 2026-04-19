@@ -16,9 +16,9 @@ public class Tower {
 
     //Constantes de posicionamiento
 
-    private static final int TOWER_X = 500;
-    private static final int BASE_Y = 700;
-    private static final int BLOCK_SIZE = 25;
+    public static final int TOWER_X = 500;
+    public static final int BASE_Y = 700;
+    public static final int BLOCK_SIZE = 25;
 
     //Estructuras principales
 
@@ -94,101 +94,10 @@ public class Tower {
             return;
         }
 
-        if (lidsCount >= 6) {
-            lidsCount = 0;
-        }
         int lidSize = sizeFromId(id);
         Lid lid = createLidByType(id, lidSize, getColorForSize(), type);
 
-        if (lid.requiresCompanionCup() && cup == null) {
-            if (isVisible) {
-                String lidType = normalizeType(type);
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "La tapa de tipo " + lidType + " requiere que exista su taza companera.");
-            }
-            return;
-        }
-
-        if (lid.prefersUnderCupPlacement()) {
-            standaloneLids.add(lid);
-            lidInsertionOrder.add(lid);
-            rebuildTower();
-            if (getCurrentHeight() > maxHeight) {
-                standaloneLids.remove(lid);
-                lidInsertionOrder.remove(lid);
-                rebuildTower();
-                if (isVisible) {
-                    javax.swing.JOptionPane.showMessageDialog(null,
-                            "No cabe la tapa, supera la altura maxima.");
-                }
-            }
-            return;
-        }
-
-        if (lid.prefersBasePlacement()) {
-            standaloneLids.add(lid);
-            lidInsertionOrder.add(lid);
-            rebuildTower();
-            if (getCurrentHeight() > maxHeight) {
-                standaloneLids.remove(lid);
-                lidInsertionOrder.remove(lid);
-                rebuildTower();
-                if (isVisible) {
-                    javax.swing.JOptionPane.showMessageDialog(null,
-                            "No cabe la tapa, supera la altura maxima.");
-                }
-            }
-            return;
-        }
-
-        Cup targetCup = resolveTargetCupForLid(cup, lid);
-
-        boolean addsTowerHeight = targetCup == null || lid.getSize() >= targetCup.getSize();
-        int projectedHeight = getCurrentHeight() + (addsTowerHeight ? BLOCK_SIZE : 0);
-
-        if (projectedHeight > maxHeight) {
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "No cabe la tapa, supera la altura maxima.");
-            }
-            return;
-        }
-
-        if (targetCup != null) {
-            targetCup.addLid(lid);
-            lidInsertionOrder.add(lid);
-            int nestedLids = countNestedLids(targetCup);
-            int coverLids = countCoverLids(targetCup);
-            int lidX = targetCup.getX() + ((targetCup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
-            int lidY;
-            if (lid.getSize() < targetCup.getSize()) {
-                int innerFloorY = targetCup.getY() + targetCup.getRealPixelHeight() - (2 * BLOCK_SIZE);
-                lidY = innerFloorY - ((nestedLids - 1) * BLOCK_SIZE);
-            } else {
-                lidY = targetCup.getY() - BLOCK_SIZE - ((coverLids - 1) * BLOCK_SIZE);
-            }
-            lid.moveTo(lidX, lidY);
-            if (isVisible) {
-                lid.makeVisible();
-            }
-            return;
-        }
-
-        int lidX = TOWER_X - ((lid.getSize() * BLOCK_SIZE) / 2);
-        int lidY = getTopY() - BLOCK_SIZE;
-        lid.moveTo(lidX, lidY);
-
-        standaloneLids.add(lid);
-        lidInsertionOrder.add(lid);
-
-        if (isVisible) {
-            lid.makeVisible();
-        }
-        lidsCount++;
-        
-        if (lidsCount > 6){
-            lidsCount = 0;
-        } 
+        lid.placeInTower(this, cup);
     }
     
 
@@ -224,13 +133,7 @@ public class Tower {
         String color = getColorForSize();
         Cup newCup = createCupByType(id, size, color, type);
 
-        if (newCup.shouldClearBlockingLids()) {
-            clearBlockingLidsFor(newCup);
-        }
-        
-        if (newCup.shouldPurgeSmallerItems()) {
-            purgeSmallerItemsFor(newCup);
-        }
+        newCup.applyPreStackEffect(this);
     
         int widthPx = newCup.getPixelWidth();
         int targetX = TOWER_X - (widthPx / 2);
@@ -288,11 +191,8 @@ public class Tower {
         newCup.moveTo(targetX, targetY);
 
         cups.add(newCup); 
-        if (newCup.shouldDisplaceSmallerItems()) {
-            displaceSmallerItems(newCup);
-        }
+        newCup.applyPostStackEffect(this);
         rebuildTower();
-        refreshHierarchicalLocks();
         CupsCount++;
         
         if (CupsCount > 6){
@@ -318,10 +218,10 @@ public class Tower {
             return;
         }
 
-        if (toRemove.isLockedAtBase()) {
+        if (!toRemove.canBeRemoved(this)) {
             if (isVisible) {
                 javax.swing.JOptionPane.showMessageDialog(null,
-                        "La taza jerarquica " + id + " esta bloqueada en la base y no se puede quitar.");
+                        "El elemento " + id + " esta bloqueado y no se puede quitar.");
             }
             return;
         }
@@ -356,10 +256,10 @@ public class Tower {
         }
 
         Lid topLid = cup.getLids().get(cup.getLids().size() - 1);
-        if (topLid.blocksRemovalFromCompanionCup(cup)) {
+        if (!topLid.canBeRemoved(this)) {
             if (isVisible) {
                 javax.swing.JOptionPane.showMessageDialog(null,
-                        "La tapa fearful no puede salir porque esta tapando a su taza companera.");
+                        "La tapa no puede salir porque esta bloqueada.");
             }
             return;
         }
@@ -401,10 +301,10 @@ public class Tower {
 
         Cup removedCup = cups.get(cups.size() - 1);
 
-        if (removedCup.isLockedAtBase()) {
+        if (!removedCup.canBeRemoved(this)) {
             if (isVisible) {
                 javax.swing.JOptionPane.showMessageDialog(null,
-                        "La taza jerarquica de la base no se puede retirar.");
+                        "El elemento no se puede retirar.");
             }
             return;
         }
@@ -433,11 +333,11 @@ public class Tower {
         Lid lastInsertedLid = lidInsertionOrder.remove(lidInsertionOrder.size() - 1);
 
         Cup containingCup = findCupContainingLid(lastInsertedLid);
-        if (containingCup != null && lastInsertedLid.blocksRemovalFromCompanionCup(containingCup)) {
+        if (!lastInsertedLid.canBeRemoved(this)) {
             lidInsertionOrder.add(lastInsertedLid);
             if (isVisible) {
                 javax.swing.JOptionPane.showMessageDialog(null,
-                        "La tapa fearful no puede salir porque esta tapando a su taza companera.");
+                        "La tapa no puede salir porque esta bloqueada.");
             }
             return;
         }
@@ -834,6 +734,14 @@ public class Tower {
         }
         
     }
+    
+    public boolean isVisible() {
+        return isVisible;
+    }
+    
+    public int getMaxHeight() {
+        return maxHeight;
+    }
 
     /**
      * Hace invisible la torre.
@@ -890,7 +798,7 @@ public class Tower {
     /**
      * Reconstruye la torre desde la base.
      */
-    private void rebuildTower() {
+    public void rebuildTower() {
 
         for (Cup c : cups) c.makeInvisible();
         for (Lid lid : standaloneLids) lid.makeInvisible();
@@ -946,9 +854,11 @@ public class Tower {
                 }
             }
             
-            if (hasUnderCupLid(c)) {
-                targetY -= BLOCK_SIZE;
+            int extraOffset = 0;
+            for (Lid lid : standaloneLids) {
+                extraOffset += lid.getOffsetContribution(c);
             }
+            targetY -= extraOffset;
             
             c.moveTo(targetX, targetY);
             
@@ -966,21 +876,7 @@ public class Tower {
             topCup = c;
         }
         for (Lid lid : standaloneLids) {
-            if (!lid.prefersUnderCupPlacement()) {
-                continue;
-            }
-
-            Cup companionCup = getCupById(lid.getId());
-            if (companionCup == null) {
-                continue;
-            }
-
-            int lidX = companionCup.getX() + ((companionCup.getSize() - lid.getSize()) * BLOCK_SIZE) / 2;
-            int lidY = companionCup.getY() + companionCup.getRealPixelHeight();
-            lid.moveTo(lidX, lidY);
-            if (isVisible) {
-                lid.makeVisible();
-            }
+            lid.positionSpecial(this);
         }
 
         for (Lid lid : standaloneLids) {
@@ -1129,14 +1025,14 @@ public class Tower {
     /**
      * Retorna una taza por identificador.
      */
-    private Cup getCupById(int id) {
+    public Cup getCupById(int id) {
         for (Cup c : cups) {
             if (c.getId() == id) return c;
         }
         return null;
     }
     
-    private void removeLidReferencesByCup(Cup cup) {
+    public void removeLidReferencesByCup(Cup cup) {
         for (Lid lid : cup.getLids()) {
             lidInsertionOrder.remove(lid);
         }
@@ -1227,118 +1123,6 @@ public class Tower {
         return type.trim().toLowerCase();
     }
 
-    private void purgeSmallerItemsFor(Cup ironCup) {
-        ArrayList<Cup> removedCups = new ArrayList<>();
-        for (Cup cup : cups) {
-            if (cup.getSize() < ironCup.getSize() && !cup.isIronCup()) {
-                removedCups.add(cup);
-            }
-        }
-
-        for (Cup cup : removedCups) {
-            removeLidReferencesByCup(cup);
-            cup.removeAllLids();
-            cup.makeInvisible();
-            cups.remove(cup);
-        }
-
-        ArrayList<Lid> removedStandalone = new ArrayList<>();
-        for (Lid lid : standaloneLids) {
-            if (lid.getSize() < ironCup.getSize()) {
-                removedStandalone.add(lid);
-            }
-        }
-        for (Lid lid : removedStandalone) {
-            lid.makeInvisible();
-            standaloneLids.remove(lid);
-            lidInsertionOrder.remove(lid);
-        }
-
-        for (Cup cup : cups) {
-            ArrayList<Lid> removedFromCup = new ArrayList<>();
-            for (Lid lid : cup.getLids()) {
-                if (lid.getSize() < ironCup.getSize()) {
-                    removedFromCup.add(lid);
-                }
-            }
-            for (Lid lid : removedFromCup) {
-                lid.makeInvisible();
-                cup.getLids().remove(lid);
-                lidInsertionOrder.remove(lid);
-            }
-        }
-    }
-    
-    private void clearBlockingLidsFor(Cup openerCup) {
-        boolean blockedByFearful = false;
-
-        ArrayList<Lid> removedStandalone = new ArrayList<>();
-        for (Lid lid : standaloneLids) {
-            if (lid.prefersBasePlacement() || lid.prefersUnderCupPlacement() || lid.getSize() < openerCup.getSize()) {
-                continue;
-            }
-
-            Cup companionCup = getCupById(lid.getId());
-            if (companionCup != null && lid.blocksRemovalFromCompanionCup(companionCup)) {
-                blockedByFearful = true;
-                continue;
-            }
-
-            removedStandalone.add(lid);
-        }
-        for (Lid lid : removedStandalone) {
-            lid.makeInvisible();
-            standaloneLids.remove(lid);
-            lidInsertionOrder.remove(lid);
-        }
-
-        for (Cup cup : cups) {
-            ArrayList<Lid> removedFromCup = new ArrayList<>();
-            for (Lid lid : cup.getLids()) {
-                if (lid.getSize() < openerCup.getSize()) {
-                    continue;
-                }
-                if (lid.blocksRemovalFromCompanionCup(cup)) {
-                    blockedByFearful = true;
-                    continue;
-                }
-                removedFromCup.add(lid);
-            }
-            for (Lid lid : removedFromCup) {
-                lid.makeInvisible();
-                cup.getLids().remove(lid);
-                lidInsertionOrder.remove(lid);
-            }
-        }
-
-        if (blockedByFearful && isVisible) {
-            javax.swing.JOptionPane.showMessageDialog(null,
-                    "No es posible retirar la tapa, es de tipo fearful.");
-        }
-    }
-
-    private void displaceSmallerItems(Cup hierarchicalCup) {
-        int index = cups.indexOf(hierarchicalCup);
-        if (index == -1) {
-            return;
-        }
-
-        ArrayList<Cup> displaced = new ArrayList<>();
-        for (int i = 0; i < index; i++) {
-            Cup existing = cups.get(i);
-            if (existing.getSize() < hierarchicalCup.getSize()) {
-                displaced.add(existing);
-            }
-        }
-        if (displaced.isEmpty()) {
-            return;
-        }
-
-        cups.removeAll(displaced);
-        int newIndex = cups.indexOf(hierarchicalCup);
-        cups.addAll(newIndex + 1, displaced);
-    }
-
     private int countBaseLids() {
         int count = 0;
         for (Lid lid : standaloneLids) {
@@ -1349,7 +1133,7 @@ public class Tower {
         return count;
     }
 
-    private void refreshHierarchicalLocks() {
+    public void refreshHierarchicalLocks() {
         int floorY = BASE_Y - (countBaseLids() * BLOCK_SIZE);
         for (Cup cup : cups) {
             if (!cup.shouldDisplaceSmallerItems()) {
@@ -1482,7 +1266,7 @@ public class Tower {
         return false;
     }
     
-    private int countNestedLids(Cup cup) {
+    public int countNestedLids(Cup cup) {
         int nested = 0;
         for (Lid lid : cup.getLids()) {
             if (lid.getSize() < cup.getSize()) {
@@ -1492,7 +1276,7 @@ public class Tower {
         return nested;
     }
 
-    private int countCoverLids(Cup cup) {
+    public int countCoverLids(Cup cup) {
         int covers = 0;
         for (Lid lid : cup.getLids()) {
             if (lid.getSize() >= cup.getSize()) {
@@ -1567,7 +1351,7 @@ public class Tower {
         return lids;
     }
     
-    private Cup resolveTargetCupForLid(Cup requestedCup, Lid lid) {
+    public Cup resolveTargetCupForLid(Cup requestedCup, Lid lid) {
         Cup targetCup = requestedCup;
 
         if (cups.isEmpty()) {
@@ -1599,4 +1383,15 @@ public class Tower {
     
     
     
+    public List<Cup> getCups() {
+        return cups;
+    }
+
+    public List<Lid> getStandaloneLids() {
+        return standaloneLids;
+    }
+
+    public List<Lid> getLidInsertionOrder() {
+        return lidInsertionOrder;
+    }
 }

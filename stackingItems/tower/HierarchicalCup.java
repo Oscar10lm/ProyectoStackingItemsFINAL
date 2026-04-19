@@ -1,5 +1,8 @@
 package tower;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Taza que desplaza objetos de menor tamano y puede bloquearse en la base.
  */
@@ -24,5 +27,30 @@ public class HierarchicalCup extends Cup {
     @Override
     public void lockAtBase() {
         lockedAtBase = true;
+    }
+
+    @Override
+    public void applyPostStackEffect(Tower tower) {
+        List<Cup> cups = tower.getCups();
+        
+        // Desplazamiento
+        int index = cups.indexOf(this);
+        if (index != -1) {
+            ArrayList<Cup> displaced = new ArrayList<>();
+            for (int i = 0; i < index; i++) {
+                Cup existing = cups.get(i);
+                if (existing.getSize() < getSize()) {
+                    displaced.add(existing);
+                }
+            }
+            if (!displaced.isEmpty()) {
+                cups.removeAll(displaced);
+                int newIndex = cups.indexOf(this);
+                cups.addAll(newIndex + 1, displaced);
+            }
+        }
+
+        // Refresco de bloqueos jerárquicos
+        tower.refreshHierarchicalLocks();
     }
 }

@@ -9,4 +9,6 @@ comment3.params=
 comment3.target=boolean\ isLockedAtBase()
 comment4.params=
 comment4.target=void\ lockAtBase()
-numComments=5
+comment5.params=tower
+comment5.target=void\ applyPostStackEffect(Tower)
+numComments=6
