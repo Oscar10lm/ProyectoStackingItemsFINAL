@@ -24,7 +24,7 @@ public class IronCup extends Cup {
     }
 
     @Override
-    public void applyPreStackEffect(Tower tower) {
+    public void applyPreStackEffect(Tower tower) throws TowerException {
         List<Cup> cups = tower.getCups();
         List<Lid> standaloneLids = tower.getStandaloneLids();
         List<Lid> lidInsertionOrder = tower.getLidInsertionOrder();

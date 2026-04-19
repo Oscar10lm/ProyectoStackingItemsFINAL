@@ -30,7 +30,7 @@ public class HierarchicalCup extends Cup {
     }
 
     @Override
-    public void applyPostStackEffect(Tower tower) {
+    public void applyPostStackEffect(Tower tower) throws TowerException {
         List<Cup> cups = tower.getCups();
         
         // Desplazamiento

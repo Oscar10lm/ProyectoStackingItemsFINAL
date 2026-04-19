@@ -57,12 +57,12 @@ public class Lid extends StackingItem {
     }
 
     @Override
-    public void applyPreStackEffect(Tower tower) {
+    public void applyPreStackEffect(Tower tower) throws TowerException {
         // Implementación por defecto.
     }
 
     @Override
-    public void applyPostStackEffect(Tower tower) {
+    public void applyPostStackEffect(Tower tower) throws TowerException {
         // Implementación por defecto.
     }
 
@@ -85,9 +85,9 @@ public class Lid extends StackingItem {
     /**
      * Posiciona la tapa en la torre.
      */
-    public void placeInTower(Tower tower, Cup targetCup) {
+    public void placeInTower(Tower tower, Cup targetCup) throws TowerException {
         if (!validatePresence(tower, targetCup)) {
-            return;
+            throw new TowerException(TowerException.MISSING_COMPANION);
         }
 
         Cup actualTarget = tower.resolveTargetCupForLid(targetCup, this);
@@ -110,9 +110,7 @@ public class Lid extends StackingItem {
              }
              tower.getLidInsertionOrder().remove(this);
              tower.rebuildTower();
-             if (tower.isVisible()) {
-                 javax.swing.JOptionPane.showMessageDialog(null, "No cabe la tapa, supera la altura maxima.");
-             }
+             throw new TowerException(TowerException.HEIGHT_EXCEEDED);
         }
     }
 

@@ -84,20 +84,22 @@ public class Tower {
      * Agrega una tapa de tipo especifico.
      */
     public void pushLid(int id, String type) {
-        Cup cup = getCupById(id);
+        try {
+            Cup cup = getCupById(id);
 
-        if (lidExistsInTower(id)) {
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "La tapa " + id + " ya existe en la torre.");
+            if (lidExistsInTower(id)) {
+                throw new TowerException(TowerException.DUPLICATE_ITEM);
             }
-            return;
+
+            int lidSize = sizeFromId(id);
+            Lid lid = createLidByType(id, lidSize, getColorForSize(), type);
+
+            lid.placeInTower(this, cup);
+        } catch (TowerException e) {
+            if (isVisible) {
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
-
-        int lidSize = sizeFromId(id);
-        Lid lid = createLidByType(id, lidSize, getColorForSize(), type);
-
-        lid.placeInTower(this, cup);
     }
     
 
@@ -112,92 +114,71 @@ public class Tower {
      * Agrega una taza de tipo especifico.
      */
     public void pushCup(int id, String type) {
-        if (id <= 0) {
-            javax.swing.JOptionPane.showMessageDialog(null,
-                "El identificador de la taza debe ser mayor que 0.");
-            return;
-        }
-
-        int size = sizeFromId(id);
-  
-        for (Cup c : cups) {
-            if (c.getId() == id) {
-                if (isVisible) {
-                    javax.swing.JOptionPane.showMessageDialog(null,
-                            "La taza " + id + " ya existe.");
-                }
-                return;
+        try {
+            if (id <= 0) {
+                throw new TowerException("El identificador de la taza debe ser mayor que 0.");
             }
-        }
-        if (CupsCount >= 6){CupsCount = 0;}
-        String color = getColorForSize();
-        Cup newCup = createCupByType(id, size, color, type);
 
-        newCup.applyPreStackEffect(this);
+            int size = sizeFromId(id);
     
-        int widthPx = newCup.getPixelWidth();
-        int targetX = TOWER_X - (widthPx / 2);
-        int targetY;
-
-        Cup topCup = cups.isEmpty() ? null : cups.get(cups.size() - 1);
-        
-        int topY = getTopY();
-        
-
-        if (topCup == null) {
-             if (topY < BASE_Y) {
-                targetY = topY - newCup.getRealPixelHeight();
-            } else {
-                targetY = BASE_Y - newCup.getRealPixelHeight();
-            }
-            
-        } else {
-
-            boolean topHasLid = topCup.hasLids();
-            boolean fitsInsideTop = newCup.getSize() < topCup.getSize();
-            boolean canNestWithCurrentTop = !topHasLid || canNestAboveInnerLid(topCup);
-
-            if (hasStandaloneLidAtTop(topY)) {
-                targetY = topY - newCup.getRealPixelHeight();
-            } else if (fitsInsideTop && canNestWithCurrentTop) {
-                targetY = getNestedTargetY(topCup, newCup);
-            
-            } else {
-                 Cup ancestorContainer = findAncestorContainerFor(topCup, newCup.getSize(), cups.size() - 1);
-                if (ancestorContainer != null) {
-                    Cup supportCup = findBestSupportInsideAncestor(ancestorContainer, newCup.getSize(), cups.size() - 1);
-                    if (supportCup != null) {
-                        targetY = getStackedAboveCupY(supportCup, newCup);
-                    } else {
-                        targetY = getNestedTargetY(ancestorContainer, newCup);
-                    }
-                } else {
-                       targetY = topY - newCup.getRealPixelHeight();
+            for (Cup c : cups) {
+                if (c.getId() == id) {
+                    throw new TowerException(TowerException.DUPLICATE_ITEM);
                 }
-                
             }
-        }
-                
-        int projectedHeight = BASE_Y - targetY;
+            if (CupsCount >= 6){CupsCount = 0;}
+            Cup newCup = createCupByType(id, size, getColorForSize(), type);
+            
+            int targetX = TOWER_X - (size * BLOCK_SIZE) / 2;
+            int currentTopY = findTopElementY();
+            int targetY;
 
-        if (projectedHeight > maxHeight) {
+            if (cups.isEmpty()) {
+                targetY = BASE_Y - newCup.getRealPixelHeight();
+            } else {
+                Cup topCup = cups.get(cups.size() - 1);
+                boolean fitsInsideTop = newCup.getSize() < topCup.getSize();
+                boolean canNestWithCurrentTop = topCup.canNest(newCup);
+
+                if (fitsInsideTop && canNestWithCurrentTop) {
+                    targetY = getNestedTargetY(topCup, newCup);
+                } else {
+                    Cup ancestorContainer = findAncestorContainerFor(topCup, newCup.getSize(), cups.size() - 1);
+                    if (ancestorContainer != null) {
+                        Cup supportCup = findBestSupportInsideAncestor(ancestorContainer, newCup.getSize(), cups.size() - 1);
+                        if (supportCup != null) {
+                            targetY = getStackedAboveCupY(supportCup, newCup);
+                        } else {
+                            targetY = getNestedTargetY(ancestorContainer, newCup);
+                        }
+                    } else {
+                        targetY = currentTopY - newCup.getRealPixelHeight();
+                    }
+                }
+            }
+                    
+            int projectedHeight = BASE_Y - targetY;
+
+            if (projectedHeight > maxHeight) {
+                throw new TowerException(TowerException.HEIGHT_EXCEEDED);
+            }
+
+            newCup.moveTo(targetX, targetY);
+            
+            newCup.applyPreStackEffect(this);
+            
+            cups.add(newCup);
+            rebuildTower();
+            
+            newCup.applyPostStackEffect(this);
+            
+            if (isVisible) newCup.makeVisible();
+            CupsCount++;
+        } catch (TowerException e) {
             if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "No se puede agregar la taza. Supera la altura máxima.");
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
             }
-            return;
         }
-
-        newCup.moveTo(targetX, targetY);
-
-        cups.add(newCup); 
-        newCup.applyPostStackEffect(this);
-        rebuildTower();
-        CupsCount++;
-        
-        if (CupsCount > 6){
-            CupsCount = 0;
-        } 
     }
 
     //Eliminación de elementos
@@ -207,151 +188,134 @@ public class Tower {
      * Elimina una taza por identificador y reconstruye la torre.
      */
     public void removeCup(int id) {
+        try {
+            Cup toRemove = getCupById(id);
 
-        Cup toRemove = getCupById(id);
+            if (toRemove == null) {
+                throw new TowerException(TowerException.ITEM_NOT_FOUND);
+            }
 
-        if (toRemove == null) {
+            if (!toRemove.canBeRemoved(this)) {
+                throw new TowerException(TowerException.ITEM_LOCKED);
+            }
+
+            if (toRemove.hasLids()) {
+                for (Lid lid : toRemove.getLids()) {
+                    lid.makeInvisible();
+                    lidInsertionOrder.remove(lid);
+                }
+                toRemove.getLids().clear();
+            }
+
+            toRemove.makeInvisible();
+            cups.remove(toRemove);
+            rebuildTower();
+        } catch (TowerException e) {
             if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "No existe la taza " + id);
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
             }
-            return;
         }
-
-        if (!toRemove.canBeRemoved(this)) {
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "El elemento " + id + " esta bloqueado y no se puede quitar.");
-            }
-            return;
-        }
-
-        if (toRemove.hasLids()) {
-            for (Lid lid : toRemove.getLids()) {
-                lid.makeInvisible();
-                lidInsertionOrder.remove(lid);
-            }
-            toRemove.getLids().clear();
-        }
-
-        toRemove.makeInvisible();
-        cups.remove(toRemove);
-        rebuildTower();
     }
 
     /**
      * Elimina la tapa superior de la taza indicada.
      */
     public void removeLid(int id) {
+        try {
+            Cup cup = getCupById(id);
 
-    Cup cup = getCupById(id);
+            if (cup != null) {
+                if (!cup.hasLids()) {
+                    throw new TowerException("La taza " + id + " no tiene tapa.");
+                }
 
-    if (cup != null) {
-            if (!cup.hasLids()) {
-                if (isVisible) {
-                    javax.swing.JOptionPane.showMessageDialog(null,
-                    "La taza " + id + " no tiene tapa.");
+                Lid topLid = cup.getLids().get(cup.getLids().size() - 1);
+                if (!topLid.canBeRemoved(this)) {
+                    throw new TowerException(TowerException.ITEM_LOCKED);
+                }
+
+                cup.removeTopLid();
+                removeLastInsertedReferenceById(id);
+                rebuildTower();     
+                return;
             }
-            return;
-        }
+            Lid removed = removeStandaloneLidById(id);
+            if (removed == null) {
+                throw new TowerException(TowerException.ITEM_NOT_FOUND);
+            }
 
-        Lid topLid = cup.getLids().get(cup.getLids().size() - 1);
-        if (!topLid.canBeRemoved(this)) {
+            removed.makeInvisible();
+            lidInsertionOrder.remove(removed);
+            rebuildTower();
+        } catch (TowerException e) {
             if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "La tapa no puede salir porque esta bloqueada.");
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
             }
-            return;
         }
-
-        cup.removeTopLid();
-        removeLastInsertedReferenceById(id);
-        rebuildTower();     
-        return;
-    }
-    Lid removed = removeStandaloneLidById(id);
-    if (removed == null) {
-        if (isVisible) {
-            javax.swing.JOptionPane.showMessageDialog(null,
-                    "No existe la tapa " + id);
-        }
-        return;
     }
 
-
-    removed.makeInvisible();
-    lidInsertionOrder.remove(removed);
-    rebuildTower();
-    
-    
-    }
 
     /**
      * Elimina la última taza insertada.
      */
     public void popCup() {
-
-        if (cups.isEmpty()) {
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "La torre está vacía.");
+        try {
+            if (cups.isEmpty()) {
+                throw new TowerException(TowerException.ITEM_NOT_FOUND);
             }
-            return;
-        }
 
-        Cup removedCup = cups.get(cups.size() - 1);
+            Cup removedCup = cups.get(cups.size() - 1);
 
-        if (!removedCup.canBeRemoved(this)) {
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "El elemento no se puede retirar.");
+            if (!removedCup.canBeRemoved(this)) {
+                throw new TowerException(TowerException.ITEM_LOCKED);
             }
-            return;
+            
+            removeLidReferencesByCup(removedCup);
+            removedCup.removeAllLids();
+            removedCup.makeInvisible();
+
+            cups.remove(cups.size() - 1);
+
+            rebuildTower();
+        } catch (TowerException e) {
+            if (isVisible) {
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
-        
-        removeLidReferencesByCup(removedCup);
-        removedCup.removeAllLids();
-        removedCup.makeInvisible();
-
-        cups.remove(cups.size() - 1);
-
-        rebuildTower();
     }
     
     /**
      * Elimina la última tapa insertada en la torre.
      */
     public void popLid() {
-        if (lidInsertionOrder.isEmpty()) {
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "La torre no tiene tapas.");
+        try {
+            if (lidInsertionOrder.isEmpty()) {
+                throw new TowerException(TowerException.ITEM_NOT_FOUND);
             }
-            return;
-        }
 
-        Lid lastInsertedLid = lidInsertionOrder.remove(lidInsertionOrder.size() - 1);
+            Lid lastInsertedLid = lidInsertionOrder.remove(lidInsertionOrder.size() - 1);
 
-        Cup containingCup = findCupContainingLid(lastInsertedLid);
-        if (!lastInsertedLid.canBeRemoved(this)) {
-            lidInsertionOrder.add(lastInsertedLid);
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "La tapa no puede salir porque esta bloqueada.");
+            Cup containingCup = findCupContainingLid(lastInsertedLid);
+            if (!lastInsertedLid.canBeRemoved(this)) {
+                lidInsertionOrder.add(lastInsertedLid);
+                throw new TowerException(TowerException.ITEM_LOCKED);
             }
-            return;
-        }
 
-        if (!standaloneLids.remove(lastInsertedLid)) {
-            for (Cup cup : cups) {
-                if (cup.getLids().remove(lastInsertedLid)) {
-                    break;
+            if (!standaloneLids.remove(lastInsertedLid)) {
+                for (Cup cup : cups) {
+                    if (cup.getLids().remove(lastInsertedLid)) {
+                        break;
+                    }
                 }
             }
-        }
 
-        lastInsertedLid.makeInvisible();
-        rebuildTower();
+            lastInsertedLid.makeInvisible();
+            rebuildTower();
+        } catch (TowerException e) {
+            if (isVisible) {
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        }
     }
     
 
@@ -361,147 +325,134 @@ public class Tower {
      * Invierte el orden actual de la torre.
      */
     public void reverseTower() {
-
-         if (cups.isEmpty() && standaloneLids.isEmpty()) return;
-        
-        Collections.reverse(cups);
-        
-        for (Cup cup : cups) {
-            Collections.reverse(cup.getLids());
-        }
-        Collections.reverse(standaloneLids);
-        
-        if (!fitsWithinHeight()) {
+        try {
+            if (cups.isEmpty() && standaloneLids.isEmpty()) return;
+            
             Collections.reverse(cups);
+            
             for (Cup cup : cups) {
                 Collections.reverse(cup.getLids());
             }
             Collections.reverse(standaloneLids);
             
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "No se puede invertir. Supera la altura máxima.");
+            if (!fitsWithinHeight()) {
+                Collections.reverse(cups);
+                for (Cup cup : cups) {
+                    Collections.reverse(cup.getLids());
+                }
+                Collections.reverse(standaloneLids);
+                
+                throw new TowerException(TowerException.HEIGHT_EXCEEDED);
             }
-            return;
-        }
 
-        rebuildTower();
+            rebuildTower();
+        } catch (TowerException e) {
+            if (isVisible) {
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        }
     }
 
     /**
      * Intercambio dos objetos de la torre y deben ser del mismo tipo. Sin cambiar la lógica visual o interna. 
      *
      */
-    public void swap (String[] o1, String[] o2){
-         if (!isValidObjectRef(o1) || !isValidObjectRef(o2)) {
-            if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "Cada objeto debe tener formato {\"tipo\", \"id\"}.");
-            }
-            return;
-        }
-
-        String type1 = o1[0].trim().toLowerCase();
-        String type2 = o2[0].trim().toLowerCase();
-
-        int id1;
-        int id2;
-
+    public void swap(String[] o1, String[] o2) {
         try {
-            id1 = Integer.parseInt(o1[1].trim());
-            id2 = Integer.parseInt(o2[1].trim());
-        } catch (NumberFormatException e) {
+            if (!isValidObjectRef(o1) || !isValidObjectRef(o2)) {
+                throw new TowerException("Cada objeto debe tener formato {\"tipo\", \"id\"}.");
+            }
+
+            String type1 = o1[0].trim().toLowerCase();
+            String type2 = o2[0].trim().toLowerCase();
+
+            int id1;
+            int id2;
+
+            try {
+                id1 = Integer.parseInt(o1[1].trim());
+                id2 = Integer.parseInt(o2[1].trim());
+            } catch (NumberFormatException e) {
+                throw new TowerException("Los identificadores deben ser numéricos.");
+            }
+
+            if (type1.equals("cup") && type2.equals("cup")) {
+                int cupIndex1 = findCupIndexById(id1);
+                int cupIndex2 = findCupIndexById(id2);
+
+                if (cupIndex1 == -1 || cupIndex2 == -1) {
+                    throw new TowerException(TowerException.ITEM_NOT_FOUND);
+                }
+
+                Collections.swap(cups, cupIndex1, cupIndex2);
+                rebuildTower();
+                return;
+            }
+
+            if (type1.equals("lid") && type2.equals("lid")) {
+                int[] lidRef1 = findLidRefById(id1);
+                int[] lidRef2 = findLidRefById(id2);
+
+                if (lidRef1 == null || lidRef2 == null) {
+                    throw new TowerException(TowerException.ITEM_NOT_FOUND);
+                }
+
+                Cup cup1 = cups.get(lidRef1[0]);
+                Cup cup2 = cups.get(lidRef2[0]);
+
+                Lid lid1 = cup1.getLids().get(lidRef1[1]);
+                Lid lid2 = cup2.getLids().get(lidRef2[1]);
+
+                cup1.getLids().set(lidRef1[1], lid2);
+                cup2.getLids().set(lidRef2[1], lid1);
+
+                rebuildTower();
+                return;
+            }
+
+            throw new TowerException("Solo se pueden intercambiar objetos del mismo tipo (cup-cup o lid-lid).");
+        } catch (TowerException e) {
             if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "Los identificadores deben ser numéricos.");
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
             }
-            return;
         }
-
-        if (type1.equals("cup") && type2.equals("cup")) {
-            int cupIndex1 = findCupIndexById(id1);
-            int cupIndex2 = findCupIndexById(id2);
-
-            if (cupIndex1 == -1 || cupIndex2 == -1) {
-                if (isVisible) {
-                    javax.swing.JOptionPane.showMessageDialog(null,
-                            "No se encontraron ambas tazas para intercambiar.");
-                }
-                return;
-            }
-
-            Collections.swap(cups, cupIndex1, cupIndex2);
-            rebuildTower();
-            return;
-        }
-
-        if (type1.equals("lid") && type2.equals("lid")) {
-            int[] lidRef1 = findLidRefById(id1);
-            int[] lidRef2 = findLidRefById(id2);
-
-            if (lidRef1 == null || lidRef2 == null) {
-                if (isVisible) {
-                    javax.swing.JOptionPane.showMessageDialog(null,
-                            "No se encontraron ambas tapas para intercambiar.");
-                }
-                return;
-            }
-
-            Cup cup1 = cups.get(lidRef1[0]);
-            Cup cup2 = cups.get(lidRef2[0]);
-
-            Lid lid1 = cup1.getLids().get(lidRef1[1]);
-            Lid lid2 = cup2.getLids().get(lidRef2[1]);
-
-            cup1.getLids().set(lidRef1[1], lid2);
-            cup2.getLids().set(lidRef2[1], lid1);
-
-            rebuildTower();
-            return;
-        }
-
-        if (isVisible) {
-            javax.swing.JOptionPane.showMessageDialog(null,
-                    "Solo se pueden intercambiar objetos del mismo tipo (cup-cup o lid-lid).");
-        }    
-    
     }
     
     /**
      * Ordena la torre de mayor a menor tamaño.
      */
     public void orderTower() {
+        try {
+            if (cups.isEmpty()) return;
 
-        if (cups.isEmpty()) return;
+            ArrayList<Cup> original = new ArrayList<>(cups);
+            ArrayList<Lid> originalStandalone = new ArrayList<>(standaloneLids);
+            
 
-        ArrayList<Cup> original = new ArrayList<>(cups);
-        ArrayList<Lid> originalStandalone = new ArrayList<>(standaloneLids);
-        
+            Collections.sort(original,
+                    (c1, c2) -> Integer.compare(c2.getSize(), c1.getSize()));
 
-        Collections.sort(original,
-                (c1, c2) -> Integer.compare(c2.getSize(), c1.getSize()));
+            if (!fitsWithinHeight()) {
+                throw new TowerException(TowerException.HEIGHT_EXCEEDED);
+            }
 
-        if (!fitsWithinHeight()) {
+            clearTowerVisual();
+
+            for (Cup c : original) {
+                pushCup(c.getId());
+                for (Lid lid : c.getLids()) {
+                    pushLid(c.getId());
+                }
+            }
+            
+            for (Lid lid : originalStandalone) {
+                pushLid(lid.getId());
+            }
+        } catch (TowerException e) {
             if (isVisible) {
-                javax.swing.JOptionPane.showMessageDialog(null,
-                        "No se puede ordenar. Supera la altura máxima.");
-            }
-            return;
-        }
-
-        clearTowerVisual();
-
-        for (Cup c : original) {
-            pushCup(c.getId());
-            for (Lid lid : c.getLids()) {
-                pushLid(c.getId());
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
-        
-        for (Lid lid : originalStandalone) {
-            pushLid(lid.getId());
-        }
-        
     }
 
     /**
@@ -608,7 +559,7 @@ public class Tower {
      * Construye la torre a partir de una lista de alturas (2*id-1).
      * Limpia la torre actual y agrega las tazas en el orden dado.
      */
-    public void rebuildFromHeights(List<Integer> heights) {
+    public void rebuildFromHeights(List<Integer> heights) throws tower.TowerException {
         clearTowerVisual();
         if (heights == null) {
             return;
@@ -1394,4 +1345,5 @@ public class Tower {
     public List<Lid> getLidInsertionOrder() {
         return lidInsertionOrder;
     }
+
 }

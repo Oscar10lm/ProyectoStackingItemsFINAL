@@ -114,6 +114,19 @@ public class Cup extends StackingItem {
         return !lids.isEmpty();
     }
 
+    /**
+     * Verifica si una taza puede anidarse dentro de esta.
+     */
+    public boolean canNest(Cup innerCup) {
+        // Una taza puede anidarse si esta taza no tiene tapas que lo impidan
+        if (!hasLids()) return true;
+        
+        // Si tiene tapas, solo se puede anidar si la tapa superior es menor que la taza que entra
+        // (Regla específica del dominio: si hay una tapa pequeña adentro, aún puede caber algo)
+        Lid topLid = lids.get(lids.size() - 1);
+        return topLid.getSize() < innerCup.getSize();
+    }
+
     public ArrayList<Lid> getLids() {
         return lids;
     }
@@ -174,12 +187,12 @@ public class Cup extends StackingItem {
     }
 
     @Override
-    public void applyPreStackEffect(Tower tower) {
+    public void applyPreStackEffect(Tower tower) throws TowerException {
         // Implementación por defecto: sin efecto previo.
     }
 
     @Override
-    public void applyPostStackEffect(Tower tower) {
+    public void applyPostStackEffect(Tower tower) throws TowerException {
         // Implementación por defecto: sin efecto posterior.
     }
 

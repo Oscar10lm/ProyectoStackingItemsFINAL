@@ -103,16 +103,16 @@ public class TowerContest {
         return (list.size() > 0) ? list: Collections.emptyList();
         }
 
-    public void simulate (int n, int h){
+    public void simulate(int n, int h) {
         List<Integer> listSolve = solveList(n, h);
-        if (listSolve.size() >= 1){
+        if (listSolve.size() >= 1) {
             Tower t = new Tower(2500, 2500);
-            for (Integer i: listSolve){
+            for (Integer i : listSolve) {
                 t.pushCup(i);
             }
             t.makeVisible();
-        }
-        else{
+            
+        } else {
             System.out.println("impossible");
         }
     }

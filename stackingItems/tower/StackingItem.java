@@ -113,12 +113,12 @@ public abstract class StackingItem {
     /**
      * Aplica efectos antes de ser apilado en la torre.
      */
-    public abstract void applyPreStackEffect(Tower tower);
+    public abstract void applyPreStackEffect(Tower tower) throws TowerException;
 
     /**
      * Aplica efectos despues de ser apilado en la torre.
      */
-    public abstract void applyPostStackEffect(Tower tower);
+    public abstract void applyPostStackEffect(Tower tower) throws TowerException;
 
     /**
      * Verifica si el elemento puede ser retirado de la torre.
