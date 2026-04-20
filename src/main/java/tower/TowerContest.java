@@ -28,7 +28,7 @@ public class TowerContest {
             return Collections.emptyList();
         }
         
-        long R = h - minH;
+        long rem = h - minH;
         
         List<Long> left = new ArrayList<>();
         List<Long> right = new ArrayList<>();
@@ -37,20 +37,20 @@ public class TowerContest {
         for (long i = n - 1; i >= 1; i--) {
             long cost = 2 * i - 1;
             
-            if (R >= cost) {
+            if (rem >= cost) {
                 // Aporta su altura completa
                 left.add(i);
-                R -= cost;
-            } else if (R == 0) {
+                rem -= cost;
+            } else if (rem == 0) {
                 // Aporta cero, cae al fondo
                 right.add(i);
             } else {
                 // Aporte parcial: Encontramos el índice exacto para la inversión matemática
-                int idx = (int) (2 * i - 2 - R);
+                int idx = (int) (2 * i - 2 - rem);
                 
                 if (idx < right.size()) {
                     right.add(idx, i); // Esta operación O(N) ocurre MÁXIMO una vez
-                    R = 0;
+                    rem = 0;
                 } else {
                     right.add(i);
                 }
@@ -111,7 +111,7 @@ public class TowerContest {
             t.makeVisible();
             
         } else {
-            System.out.println("impossible");
+            throw new IllegalArgumentException("impossible");
         }
     }
 }

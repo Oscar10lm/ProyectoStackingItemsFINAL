@@ -10,10 +10,10 @@ import java.util.Arrays;
  * Realiza pruebas unitarias sobre el constructor de tazas y la lógica de intercambio de la torre.
  * @author gaitan - lasso
  */
-public class TowerTestC2 {
+public class TowerC2Test {
 
     @Test
-    public void ShouldBuildTower() {
+    public void shouldBuildTower() {
         // Arrange
 
         // Act
@@ -31,7 +31,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldntBuildinNegativeOrZeroConstructor() {
+    public void shouldntBuildinNegativeOrZeroConstructor() {
         // Arrange
 
         // Act
@@ -46,7 +46,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldSwapTwoCups() {
+    public void shouldSwapTwoCups() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(2);
@@ -67,7 +67,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldSwapLids() {
+    public void shouldSwapLids() {
         // Arrange
         Tower tower = new Tower(300, 2000);
         tower.pushCup(6);
@@ -90,7 +90,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldntSwapDiferentsObjects() {
+    public void shouldntSwapDiferentsObjects() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -106,7 +106,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldntSwapAnyErrorStructure() {
+    public void shouldntSwapAnyErrorStructure() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);
@@ -124,7 +124,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldCover() {
+    public void shouldCover() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(5);
@@ -143,7 +143,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldntChangeTowerWhenCover() {
+    public void shouldntChangeTowerWhenCover() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -161,7 +161,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldSuggestSwap() {
+    public void shouldSuggestSwap() {
         // Arrange
         Tower tower = new Tower(300, 2000);
         tower.pushCup(2);
@@ -186,7 +186,7 @@ public class TowerTestC2 {
     }
 
     @Test
-    public void ShouldntSuggestSwap() {
+    public void shouldntSuggestSwap() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);

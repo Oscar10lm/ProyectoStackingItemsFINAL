@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class TowerLidsTest
 {
     @Test
-    public void ShouldCreateLid() {
+    public void shouldCreateLid() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -37,7 +37,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldPlaceLidOnMatchingCup() {
+    public void shouldPlaceLidOnMatchingCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);
@@ -55,7 +55,7 @@ public class TowerLidsTest
         assertTrue(tower.ok());
     }
     @Test
-    public void ShouldNestCupWhenTopIsInnerLid() {
+    public void shouldNestCupWhenTopIsInnerLid() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushLid(2);
@@ -75,7 +75,7 @@ public class TowerLidsTest
     }
     
     @Test
-    public void ShouldPlaceLidInsideCup() {
+    public void shouldPlaceLidInsideCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -94,7 +94,7 @@ public class TowerLidsTest
 
     //Resolver
     @Test
-    public void ShouldCoverCupWithLidInside() {
+    public void shouldCoverCupWithLidInside() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -116,7 +116,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldRemoveLidFromCupById() {
+    public void shouldRemoveLidFromCupById() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);
@@ -135,7 +135,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldRemoveTopLid() {
+    public void shouldRemoveTopLid() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);
@@ -154,7 +154,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldPopLastLid() {
+    public void shouldPopLastLid() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -181,7 +181,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldntPopLidWhenEmptyTower() {
+    public void shouldntPopLidWhenEmptyTower() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(2);
@@ -198,7 +198,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldntRemoveLidWhenIdDoesNotExist() {
+    public void shouldntRemoveLidWhenIdDoesNotExist() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);
@@ -216,7 +216,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldNotAddFearfulLidWithoutCompanionCup() {
+    public void shouldNotAddFearfulLidWithoutCompanionCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -229,7 +229,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldNotRemoveFearfulLidWhenCoveringCompanionCup() {
+    public void shouldNotRemoveFearfulLidWhenCoveringCompanionCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);
@@ -245,7 +245,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldPlaceCrazyLidAsBase() {
+    public void shouldPlaceCrazyLidAsBase() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);
@@ -263,7 +263,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldKeepConsistentLidAndCup() {
+    public void shouldKeepConsistentLidAndCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -286,7 +286,7 @@ public class TowerLidsTest
     }
     
     @Test
-    public void ShouldStackSmallLidInBigLid() {
+    public void shouldStackSmallLidInBigLid() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);
@@ -310,7 +310,7 @@ public class TowerLidsTest
     }
     
     @Test
-    public void ShouldCoverCupWithNestedLids() {
+    public void shouldCoverCupWithNestedLids() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -335,7 +335,7 @@ public class TowerLidsTest
     }
     
     @Test
-    public void ShouldPopTopLid() {
+    public void shouldPopTopLid() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushLid(2);
@@ -353,7 +353,7 @@ public class TowerLidsTest
     }
 
     @Test
-    public void ShouldPopAloneLid() {
+    public void shouldPopAloneLid() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -373,7 +373,7 @@ public class TowerLidsTest
     }
     
      @Test
-    public void ShouldStackLidInNestingCup() {
+    public void shouldStackLidInNestingCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushLid(1);

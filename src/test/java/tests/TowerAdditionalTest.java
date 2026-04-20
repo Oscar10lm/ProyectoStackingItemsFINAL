@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class TowerAdditionalTest {
 
     @Test
-    public void ShouldHandleSwapInvalidTypes() {
+    public void shouldHandleSwapInvalidTypes() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(1);
         tower.pushLid(2);
@@ -21,7 +21,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleSwapInvalidIds() {
+    public void shouldHandleSwapInvalidIds() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(1);
         tower.pushCup(2);
@@ -31,7 +31,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandlePopLockedCup() {
+    public void shouldHandlePopLockedCup() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(4, "hierarchical"); 
         
@@ -42,7 +42,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandlePopLockedLid() {
+    public void shouldHandlePopLockedLid() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(3);
         tower.pushLid(3, "fearful"); 
@@ -54,7 +54,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldTestStackingItemBasicMethods() {
+    public void shouldTestStackingItemBasicMethods() {
         Cup cup = new Cup(1, 10, "red");
         cup.makeVisible();
         assertTrue(cup.isVisible());
@@ -68,20 +68,20 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleTowerConstructorWithZeroCups() {
+    public void shouldHandleTowerConstructorWithZeroCups() {
         Tower tower = new Tower(0);
         assertEquals(0, tower.height());
     }
 
     @Test
-    public void ShouldHandleRemoveNonExistentLid() {
+    public void shouldHandleRemoveNonExistentLid() {
         Tower tower = new Tower(300, 1000);
         tower.removeLid(99);
         assertTrue(tower.ok());
     }
 
     @Test
-    public void ShouldHandleRemoveLidFromCupWithoutLid() {
+    public void shouldHandleRemoveLidFromCupWithoutLid() {
         Tower tower = new Tower(300, 1000);
         tower.pushCup(1);
         tower.removeLid(1);
@@ -89,14 +89,14 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleRebuildFromHeights() throws tower.TowerException {
+    public void shouldHandleRebuildFromHeights() throws tower.TowerException {
         Tower tower = new Tower(500, 1000);
         tower.rebuildFromHeights(Arrays.asList(1, 3, 5));
         assertEquals(3, tower.stackingItems().length);
     }
 
     @Test
-    public void ShouldHandleSwapToReduce() {
+    public void shouldHandleSwapToReduce() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(1);
         tower.pushCup(3);
@@ -108,7 +108,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleCover() {
+    public void shouldHandleCover() {
         Tower tower = new Tower(500, 1000);
         tower.pushLid(2); // standalone
         tower.pushCup(2); // cup 2 exists but no lid
@@ -122,7 +122,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldTestCupNestingRules() {
+    public void shouldTestCupNestingRules() {
         Cup cup4 = new Cup(4, 4, "red");
         Cup cup2 = new Cup(2, 2, "blue");
         Cup cup5 = new Cup(5, 5, "green");
@@ -132,7 +132,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleStandaloneLidPositioning() {
+    public void shouldHandleStandaloneLidPositioning() {
         Tower tower = new Tower(500, 1000);
         tower.pushLid(5);
         tower.pushLid(7);
@@ -142,7 +142,7 @@ public class TowerAdditionalTest {
         assertTrue(tower.ok());
     }
     @Test
-    public void ShouldHandleTowerVisibility() {
+    public void shouldHandleTowerVisibility() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(1);
         tower.pushLid(1);
@@ -155,7 +155,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleTowerHeightExceededOnPush() {
+    public void shouldHandleTowerHeightExceededOnPush() {
         Tower tower = new Tower(300, 10);
         // Cup 5 size 9, height 2*9-1 = 17 blocks. 17 > 10.
         tower.pushCup(5);
@@ -163,7 +163,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleTowerDuplicateLid() {
+    public void shouldHandleTowerDuplicateLid() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(1);
         tower.pushLid(1);
@@ -174,14 +174,14 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleTowerRemoveNonExistentCup() {
+    public void shouldHandleTowerRemoveNonExistentCup() {
         Tower tower = new Tower(500, 1000);
         tower.removeCup(99);
         assertTrue(tower.ok());
     }
 
     @Test
-    public void ShouldHandleTowerSwapSameTypesLid() {
+    public void shouldHandleTowerSwapSameTypesLid() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(1);
         tower.pushLid(1);
@@ -193,7 +193,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleTowerOrderWithHeightExceeded() {
+    public void shouldHandleTowerOrderWithHeightExceeded() {
         // This is hard to trigger but let's try a small tower
         Tower tower = new Tower(300, 5);
         tower.pushCup(1);
@@ -203,7 +203,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleTowerExit() {
+    public void shouldHandleTowerExit() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(1);
         tower.pushLid(1);
@@ -213,7 +213,7 @@ public class TowerAdditionalTest {
     }
 
     @Test
-    public void ShouldHandleTowerRebuildWithInvalidHeights() throws tower.TowerException {
+    public void shouldHandleTowerRebuildWithInvalidHeights() throws tower.TowerException {
         Tower tower = new Tower(500, 1000);
         tower.rebuildFromHeights(Arrays.asList(null, 0, 2, 3)); // 0 and 2 are invalid, null is ignored
         assertEquals(1, tower.stackingItems().length); // Only height 3 (id 2) should be added

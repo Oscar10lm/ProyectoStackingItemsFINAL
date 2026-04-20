@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
  * Realiza pruebas unitarias sobre las consultas de estado, ordenamiento y persistencia visual de la torre.
  * @author gaitan - lasso
  */
-public class TowerTestC1 {
+public class TowerC1Test {
 
     @Test
-    public void ShouldOrderTowerFromBiggerToSmallerCupIds() {
+    public void shouldOrderTowerFromBiggerToSmallerCupIds() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(2);
@@ -29,7 +29,7 @@ public class TowerTestC1 {
     }
 
     @Test
-    public void ShouldOrderTowerKeepingLidsWithTheirCup() {
+    public void shouldOrderTowerKeepingLidsWithTheirCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(2);
@@ -50,7 +50,7 @@ public class TowerTestC1 {
     }
 
     @Test
-    public void ShouldntChangeEmptyTowerWhenOrderTower() {
+    public void shouldntChangeEmptyTowerWhenOrderTower() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -64,7 +64,7 @@ public class TowerTestC1 {
     }
 
     @Test
-    public void ShouldReverseTowerOrderForCupsAndStandaloneLids() {
+    public void shouldReverseTowerOrderForCupsAndStandaloneLids() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(1);
@@ -85,7 +85,7 @@ public class TowerTestC1 {
     }
 
     @Test
-    public void ShouldntBreakTowerWhenReverseEmptyTower() {
+    public void shouldntBreakTowerWhenReverseEmptyTower() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -99,7 +99,7 @@ public class TowerTestC1 {
     }
 
     @Test
-    public void ShouldReturnExpectedHeightWithNestedAndStackedElements() {
+    public void shouldReturnExpectedHeightWithNestedAndStackedElements() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(3);   // altura base = 9
@@ -116,7 +116,7 @@ public class TowerTestC1 {
     }
 
     @Test
-    public void ShouldReturnLiddedCupsOnlyForCupsWithLids() {
+    public void shouldReturnLiddedCupsOnlyForCupsWithLids() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(1);
@@ -133,7 +133,7 @@ public class TowerTestC1 {
     }
 
     @Test
-    public void ShouldReturnStackingItemsInInsertionStructureOrder() {
+    public void shouldReturnStackingItemsInInsertionStructureOrder() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -153,7 +153,7 @@ public class TowerTestC1 {
     }
 
     @Test
-    public void ShouldExitAndClearAllTowerData() {
+    public void shouldExitAndClearAllTowerData() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(5);

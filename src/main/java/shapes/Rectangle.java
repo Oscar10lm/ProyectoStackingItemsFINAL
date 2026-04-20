@@ -7,7 +7,7 @@ package shapes;
  */
 public class Rectangle extends Shape {
 
-    public static int EDGES = 4;
+    public static final int EDGES = 4;
 
     private int height;
     private int width;
@@ -71,7 +71,7 @@ public class Rectangle extends Shape {
      */
     public void changeSize(int newHeight, int newWidth) {
         if (newHeight < 0 || newWidth < 0) {
-            System.out.println("Error, valor negativo no permitido");
+            throw new IllegalArgumentException("Error, valor negativo no permitido");
         } else {
             erase();
             height = newHeight;

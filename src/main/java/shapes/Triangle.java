@@ -9,7 +9,7 @@ import java.awt.Polygon;
  */
 public class Triangle extends Shape {
 
-    public static int VERTICES = 3;
+    public static final int VERTICES = 3;
 
     private int height;
     private int width;

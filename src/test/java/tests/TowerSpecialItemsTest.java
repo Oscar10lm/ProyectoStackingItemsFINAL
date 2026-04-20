@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class TowerSpecialItemsTest {
 
     @Test
-    public void ShouldCreateIronCup() {
+    public void shouldCreateIronCup() {
         IronCup cup = new IronCup(10, 10, "black");
         assertEquals(10, cup.getId());
         assertEquals(10, cup.getSize());
@@ -20,7 +20,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldIronCupPurgeSmallerItemsOnStack() {
+    public void shouldIronCupPurgeSmallerItemsOnStack() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(1); // Size 1
         tower.pushCup(2); // Size 2
@@ -54,7 +54,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldIronCupNotPurgeOtherIronCups() {
+    public void shouldIronCupNotPurgeOtherIronCups() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(2, "iron"); 
         tower.pushCup(4, "iron"); 
@@ -64,7 +64,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldOpenerCupBeBlockedByFearfulLid() {
+    public void shouldOpenerCupBeBlockedByFearfulLid() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(5);
         tower.pushLid(5, "fearful"); 
@@ -78,7 +78,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldOpenerCupRemoveNormalLids() {
+    public void shouldOpenerCupRemoveNormalLids() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(5);
         tower.pushLid(5); 
@@ -96,7 +96,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldHierarchicalCupDisplaceSmallerItems() {
+    public void shouldHierarchicalCupDisplaceSmallerItems() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(5); 
         tower.pushCup(1); 
@@ -114,7 +114,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldHierarchicalCupBeLockedAtBase() {
+    public void shouldHierarchicalCupBeLockedAtBase() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(4, "hierarchical");
         
@@ -125,14 +125,14 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldCrazyLidRequireCompanion() {
+    public void shouldCrazyLidRequireCompanion() {
         Tower tower = new Tower(500, 1000);
         tower.pushLid(3, "crazy");
         assertEquals(0, tower.stackingItems().length);
     }
 
     @Test
-    public void ShouldCrazyLidPositionUnderCup() {
+    public void shouldCrazyLidPositionUnderCup() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(3);
         tower.pushLid(3, "crazy");
@@ -145,7 +145,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldOpenerCupHandleDifferentLidTypes() {
+    public void shouldOpenerCupHandleDifferentLidTypes() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(5);
         tower.pushLid(5); // Size 9, normal lid
@@ -164,7 +164,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldOpenerCupIgnoreSmallerLids() {
+    public void shouldOpenerCupIgnoreSmallerLids() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(5);
         tower.pushLid(1); // Size 1, smaller than Opener size 3
@@ -176,7 +176,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldHierarchicalCupHandleNoDisplacement() {
+    public void shouldHierarchicalCupHandleNoDisplacement() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(4); // Size 7
         tower.pushCup(2, "hierarchical"); // Size 3
@@ -188,7 +188,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldCrazyLidOffsetContribution() {
+    public void shouldCrazyLidOffsetContribution() {
         CrazyLid lid = new CrazyLid(3, 5, "red");
         Cup cup3 = new Cup(3, 5, "red");
         Cup cup4 = new Cup(4, 7, "blue");
@@ -199,7 +199,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldCrazyLidPositionSpecialVisible() {
+    public void shouldCrazyLidPositionSpecialVisible() {
         Tower tower = new Tower(500, 1000);
         tower.makeVisible();
         tower.pushCup(3);
@@ -210,7 +210,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldFearfulLidNotBlockIfDifferentCup() {
+    public void shouldFearfulLidNotBlockIfDifferentCup() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(3);
         tower.pushCup(5);
@@ -222,7 +222,7 @@ public class TowerSpecialItemsTest {
         assertFalse(lid.blocksRemovalFromCompanionCup(null));
     }
     @Test
-    public void ShouldFearfulLidBlockRemovalOnlyIfSizeMatches() {
+    public void shouldFearfulLidBlockRemovalOnlyIfSizeMatches() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(5);
         tower.pushLid(3, "fearful"); // size 3 < cup size 5
@@ -234,7 +234,7 @@ public class TowerSpecialItemsTest {
     }
 
     @Test
-    public void ShouldFearfulLidBlockRemovalIfSizeIsGreaterOrEqual() {
+    public void shouldFearfulLidBlockRemovalIfSizeIsGreaterOrEqual() {
         Tower tower = new Tower(500, 1000);
         tower.pushCup(3);
         tower.pushLid(3, "fearful"); // size 3 == cup size 3

@@ -33,10 +33,10 @@ public class Tower {
     private int width;
     private int maxHeight;
     
-    private static final int DefaultWidth = 300;
-    private static final int DefaultMaxHeight = 1000;
+    private static final int DEFAULT_WIDTH = 300;
+    private static final int DEFAULT_MAX_HEIGHT = 1000;
     
-    private static int CupsCount = 0;
+    private static int cupsCount = 0;
     private static int lidsCount = 0;
 
 
@@ -57,8 +57,9 @@ public class Tower {
     /**
      * Crea una torre con una cantidad inicial de tazas.
      */
+    @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
     public Tower(int cups) {
-        this(DefaultWidth, DefaultMaxHeight);
+        this(DEFAULT_WIDTH, DEFAULT_MAX_HEIGHT);
 
         if (cups <= 0) {
             return;
@@ -665,19 +666,29 @@ public class Tower {
     public void makeVisible() {
         isVisible = true;
         drawHeightMarks();
+        makeCupsVisible();
+        makeStandaloneLidsVisible();
+        makeAllLidsVisible();
+    }
+    
+    private void makeCupsVisible() {
         for (Cup c : cups) {
             c.makeVisible();
         }
+    }
+    
+    private void makeStandaloneLidsVisible() {
         for (Lid lid : standaloneLids) {
             lid.makeVisible();
         }
-
+    }
+    
+    private void makeAllLidsVisible() {
         for (Lid lid : getAllLidsInTower()) {
             lid.makeVisible();
         }
-        
     }
-    
+
     public boolean isVisible() {
         return isVisible;
     }
@@ -691,49 +702,69 @@ public class Tower {
      */
     public void makeInvisible() {
         isVisible = false;
+        makeCupsInvisible();
+        makeStandaloneLidsInvisible();
+        makeAllLidsInvisible();
+        makeHeightMarksInvisible();
+    }
+    
+    private void makeCupsInvisible() {
         for (Cup c : cups) {
             c.makeInvisible();
         }
+    }
+    
+    private void makeStandaloneLidsInvisible() {
         for (Lid lid : standaloneLids) {
             lid.makeInvisible();
         }
+    }
+    
+    private void makeAllLidsInvisible() {
         for (Lid lid : getAllLidsInTower()) {
             lid.makeInvisible();
         }
-
-        for (Rectangle mark : heightMarks) {
-            mark.makeInvisible();
+    }
+    
+    private void makeHeightMarksInvisible() {
+        if (heightMarks != null) {
+            for (Rectangle mark : heightMarks) {
+                mark.makeInvisible();
+            }
         }
-        
     }
 
     /**
      * Cierra el simulador y libera todos los recursos visuales.
      */
     public void exit() {
-
+        hideAllElements();
+        clearAllCollections();
+        isVisible = false;
+    }
+    
+    private void hideAllElements() {
         for (Cup c : cups) {
-            for (Lid lid : c.getLids()) {
-                lid.makeInvisible();
-            }
+            hideLidsOfCup(c);
             c.makeInvisible();
         }
-        
-        for (Lid lid : standaloneLids) {
+        makeStandaloneLidsInvisible();
+    }
+    
+    private void hideLidsOfCup(Cup c) {
+        for (Lid lid : c.getLids()) {
             lid.makeInvisible();
         }
-        
+    }
+    
+    private void clearAllCollections() {
         cups.clear();
         standaloneLids.clear();
         lidInsertionOrder.clear();
         if (heightMarks != null) {
-            for (Rectangle r : heightMarks) {
-                r.makeInvisible();
-            }
+            makeHeightMarksInvisible();
             heightMarks.clear();
         }
-
-        isVisible = false;
     }
 
     //Métodos auxiliares
@@ -1009,7 +1040,7 @@ public class Tower {
                 }
             }
         }
-        return null;
+        return new int[0];
     }
 
     private boolean isValidObjectRef(String[] objectRef) {
@@ -1029,7 +1060,7 @@ public class Tower {
      */
     private String getColorForSize() {
         String[] colors = {"red", "blue", "green", "yellow", "magenta", "black"};
-        return colors[CupsCount % colors.length];
+        return colors[cupsCount % colors.length];
     }
 
     private Cup createCupByType(int id, int size, String color, String type) {
@@ -1269,28 +1300,36 @@ public class Tower {
     
     private ArrayList<Lid> getAllLidsInTower() {
         ArrayList<Lid> lids = new ArrayList<>();
+        collectCupLids(lids);
+        collectStandaloneLids(lids);
+        collectInsertionOrderLids(lids);
+        return lids;
+    }
 
+    private void collectCupLids(ArrayList<Lid> lids) {
         for (Cup cup : cups) {
             for (Lid lid : cup.getLids()) {
-                if (!lids.contains(lid)) {
-                    lids.add(lid);
-                }
+                addLidIfNotPresent(lids, lid);
             }
         }
+    }
 
+    private void collectStandaloneLids(ArrayList<Lid> lids) {
         for (Lid lid : standaloneLids) {
-            if (!lids.contains(lid)) {
-                lids.add(lid);
-            }
+            addLidIfNotPresent(lids, lid);
         }
+    }
 
+    private void collectInsertionOrderLids(ArrayList<Lid> lids) {
         for (Lid lid : lidInsertionOrder) {
-            if (!lids.contains(lid)) {
-                lids.add(lid);
-            }
+            addLidIfNotPresent(lids, lid);
         }
+    }
 
-        return lids;
+    private void addLidIfNotPresent(ArrayList<Lid> lids, Lid lid) {
+        if (!lids.contains(lid)) {
+            lids.add(lid);
+        }
     }
     
     public Cup resolveTargetCupForLid(Cup requestedCup, Lid lid) {

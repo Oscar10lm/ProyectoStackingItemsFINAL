@@ -27,7 +27,7 @@ public class TowerCupsTest
 {
     
     @Test 
-    public void ShouldCreateCup(){
+    public void shouldCreateCup(){
         // Arrange
         Tower tower = new Tower(800,800);
         
@@ -44,7 +44,7 @@ public class TowerCupsTest
     
     @Test
     
-    public void ShouldNestSmallCup() {
+    public void shouldNestSmallCup() {
          // Arrange
         Tower tower = new Tower(800,800);
         tower.pushCup(3);
@@ -61,7 +61,7 @@ public class TowerCupsTest
     }
     
     @Test
-    void ShouldStackBiggerCup() {
+    void shouldStackBiggerCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(2);
@@ -77,7 +77,7 @@ public class TowerCupsTest
     }
     
     @Test
-    public void ShouldntCreateCupWhenIdIsZeroOrNegative() {
+    public void shouldntCreateCupWhenIdIsZeroOrNegative() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -91,7 +91,7 @@ public class TowerCupsTest
     }
     
     @Test
-    public void ShouldntCreateCupWhenRepeatedId() {
+    public void shouldntCreateCupWhenRepeatedId() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(2);
@@ -106,7 +106,7 @@ public class TowerCupsTest
     }
     
     @Test
-    public void ShouldntCreateCupInMaxHeight() {
+    public void shouldntCreateCupInMaxHeight() {
         // Arrange
         Tower tower = new Tower(300, 300);
         tower.pushCup(2);
@@ -122,7 +122,7 @@ public class TowerCupsTest
     }
     
      @Test
-    public void ShouldKeepTowerConsistent() {
+    public void shouldKeepTowerConsistent() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -144,7 +144,7 @@ public class TowerCupsTest
     
     @Test 
     
-    public void ShouldKeepTowerConsistentSandwich() {
+    public void shouldKeepTowerConsistentSandwich() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -168,7 +168,7 @@ public class TowerCupsTest
     }
     
      @Test
-    public void ShouldRemoveCupByIdAndKeepTowerConsistent() {
+    public void shouldRemoveCupByIdAndKeepTowerConsistent() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(1);
@@ -188,7 +188,7 @@ public class TowerCupsTest
     }
     
     @Test
-    public void ShouldntRemoveCupWhenIdDoesNotExist() {
+    public void shouldntRemoveCupWhenIdDoesNotExist() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(1);
@@ -206,7 +206,7 @@ public class TowerCupsTest
     }
     
     @Test
-    public void ShouldPopLastInsertedCup() {
+    public void shouldPopLastInsertedCup() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(2);
@@ -223,7 +223,7 @@ public class TowerCupsTest
     }
 
     @Test
-    public void ShouldntPopCupWhenTowerIsEmpty() {
+    public void shouldntPopCupWhenTowerIsEmpty() {
         // Arrange
         Tower tower = new Tower(300, 1000);
 
@@ -237,7 +237,7 @@ public class TowerCupsTest
     }
 
     @Test
-    public void ShouldCreateOpenerCupAndClearBlockingLids() {
+    public void shouldCreateOpenerCupAndClearBlockingLids() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4);
@@ -255,7 +255,7 @@ public class TowerCupsTest
     }
 
     @Test
-    public void ShouldNotRemoveHierarchicalCupWhenLockedAtBase() {
+    public void shouldNotRemoveHierarchicalCupWhenLockedAtBase() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushCup(4, "hierarchical");
@@ -271,7 +271,7 @@ public class TowerCupsTest
     }
     
      @Test
-    public void ShouldNestCupWhenTopIsInnerLid() {
+    public void shouldNestCupWhenTopIsInnerLid() {
         // Arrange
         Tower tower = new Tower(300, 1000);
         tower.pushLid(2);
@@ -291,7 +291,7 @@ public class TowerCupsTest
     }
     
      @Test
-    public void ShouldNestInAncestorContainerWhenTopCupCannotContain() {
+    public void shouldNestInAncestorContainerWhenTopCupCannotContain() {
         // Arrange
         Tower tower = new Tower(300, 2000);
 

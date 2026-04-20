@@ -30,11 +30,11 @@ public abstract class StackingItem {
         this.xPosition = 0;
         this.yPosition = 0;
         this.parts = new ArrayList<>();
-        rebuild();
     }
 
     protected abstract void buildParts();
 
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void afterMove() {
         // Hook para subclases.
     }
