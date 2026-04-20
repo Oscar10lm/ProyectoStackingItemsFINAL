@@ -118,6 +118,7 @@ public class Cup extends StackingItem {
      * Determina si una taza de menor tamaño puede introducirse en esta.
      */
     public boolean canNest(Cup innerCup) {
+        if (innerCup.getSize() >= getSize()) return false;
         // Una taza puede anidarse si esta taza no tiene tapas que lo impidan
         if (!hasLids()) return true;
         
