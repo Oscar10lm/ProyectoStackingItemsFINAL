@@ -1,7 +1,8 @@
 package tower;
 
 /**
- * Tapa que solo entra si su taza companera existe y no sale si la esta tapando.
+ * Variante de tapa que exige la presencia de su taza compañera y bloquea su propia remoción.
+ * @author gaitan - lasso
  */
 public class FearfulLid extends Lid {
 

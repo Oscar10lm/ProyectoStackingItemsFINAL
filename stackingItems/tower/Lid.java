@@ -5,20 +5,20 @@ package tower;
 import shapes.Rectangle;
 
 /**
- * Representa una tapa asociable a una taza.
- * @author Juan Gaitán and Oscar LasLidso
+ * Modela una tapa que puede colocarse sobre tazas o permanecer independiente.
+ * @author gaitan - lasso
  */
 public class Lid extends StackingItem {
 
     /**
-     * Construye una tapa con identificador, tamaño y color.
+     * Inicializa una nueva tapa con su identificador, tamaño y color.
      */
     public Lid(int id, int size, String color) {
         super(id, size, color);
     }
 
     /**
-     * Construye la geometría de la tapa.
+     * Define la estructura visual de la tapa a partir de bloques.
      */
     @Override
     protected void buildParts() {
@@ -29,28 +29,28 @@ public class Lid extends StackingItem {
     }
 
     /**
-     * Indica si la tapa exige que exista su taza companera.
+     * Indica si la tapa requiere obligatoriamente una taza compañera.
      */
     public boolean requiresCompanionCup() {
         return false;
     }
 
     /**
-     * Indica si la tapa no se puede retirar cuando tapa a su taza.
+     * Determina si la tapa impide que se retire su taza asociada.
      */
     public boolean blocksRemovalFromCompanionCup(Cup cup) {
         return false;
     }
 
     /**
-     * Indica si la tapa debe ubicarse como base de la torre.
+     * Indica si la tapa prefiere ubicarse en la base de la torre.
      */
     public boolean prefersBasePlacement() {
         return false;
     }
     
     /**
-     * Indica si la tapa debe ubicarse debajo de la taza companera.
+     * Indica si la tapa debe posicionarse justo debajo de su taza compañera.
      */
     public boolean prefersUnderCupPlacement() {
         return false;
@@ -73,7 +73,7 @@ public class Lid extends StackingItem {
     }
 
     /**
-     * Valida si la tapa puede ser agregada según la presencia de otros objetos.
+     * Valida si se cumplen las condiciones para añadir esta tapa a la torre.
      */
     public boolean validatePresence(Tower tower, Cup companion) {
         if (requiresCompanionCup() && companion == null) {
@@ -83,7 +83,7 @@ public class Lid extends StackingItem {
     }
 
     /**
-     * Posiciona la tapa en la torre.
+     * Ejecuta la lógica para colocar la tapa en la posición que le corresponde.
      */
     public void placeInTower(Tower tower, Cup targetCup) throws TowerException {
         if (!validatePresence(tower, targetCup)) {
@@ -115,14 +115,14 @@ public class Lid extends StackingItem {
     }
 
     /**
-     * Retorna el espacio extra que esta tapa ocupa debajo de una taza.
+     * Calcula el desplazamiento vertical adicional que genera esta tapa.
      */
     public int getOffsetContribution(Cup cup) {
         return 0;
     }
 
     /**
-     * Posiciona la tapa si tiene reglas especiales de ubicación.
+     * Gestiona la colocación de la tapa si posee reglas de ubicación atípicas.
      */
     public void positionSpecial(Tower tower) {
         // Por defecto no hace nada.

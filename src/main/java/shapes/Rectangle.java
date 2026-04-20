@@ -1,10 +1,9 @@
 package shapes;
 
 /**
- * A rectangle that can be manipulated and that draws itself on a canvas.
- *
- * @author  Michael Kolling and David J. Barnes (Modified)
- * @version 1.0  (15 July 2000)()
+ * Modela un rectángulo que puede mostrarse y manipularse en un lienzo.
+ * @author Michael Kolling and David J. Barnes (Modified)
+ * @version 1.0 (15 July 2000)()
  */
 public class Rectangle extends Shape {
 
@@ -14,7 +13,7 @@ public class Rectangle extends Shape {
     private int width;
 
     /**
-     * Create a new rectangle at default position with default color.
+     * Crea un rectángulo con dimensiones y posición predeterminadas.
      */
     public Rectangle() {
         super(0, 0, "magenta");
@@ -30,7 +29,7 @@ public class Rectangle extends Shape {
     }
 
     /**
-     * Reset the size of the rectangle to its default values.
+     * Restablece las dimensiones del rectángulo a sus valores de fábrica.
      */
     public void resetSize() {
         height = 30;
@@ -68,9 +67,7 @@ public class Rectangle extends Shape {
     }
 
     /**
-     * Change the size to the new size.
-     * @param newHeight the new height in pixels. newHeight must be >=0.
-     * @param newWidth the new width in pixels. newWidth must be >=0.
+     * Ajusta el ancho y el alto del rectángulo a nuevos valores en píxeles.
      */
     public void changeSize(int newHeight, int newWidth) {
         if (newHeight < 0 || newWidth < 0) {

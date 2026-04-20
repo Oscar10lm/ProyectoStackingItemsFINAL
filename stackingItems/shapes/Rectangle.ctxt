@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=Rectangle
+comment0.text=\r\n\ Modela\ un\ rect\u00E1ngulo\ que\ puede\ mostrarse\ y\ manipularse\ en\ un\ lienzo.\r\n\ @author\ Michael\ Kolling\ and\ David\ J.\ Barnes\ (Modified)\r\n\ @version\ 1.0\ (15\ July\ 2000)()\r\n
+comment1.params=
+comment1.target=Rectangle()
+comment1.text=\r\n\ Crea\ un\ rect\u00E1ngulo\ con\ dimensiones\ y\ posici\u00F3n\ predeterminadas.\r\n
+comment2.params=perimeter
+comment2.target=Rectangle(int)
+comment3.params=
+comment3.target=void\ resetSize()
+comment3.text=\r\n\ Restablece\ las\ dimensiones\ del\ rect\u00E1ngulo\ a\ sus\ valores\ de\ f\u00E1brica.\r\n
+comment4.params=
+comment4.target=int\ perimeter()
+comment5.params=z
+comment5.target=void\ zoom(char)
+comment6.params=times
+comment6.target=void\ walk(int)
+comment7.params=newHeight\ newWidth
+comment7.target=void\ changeSize(int,\ int)
+comment7.text=\r\n\ Ajusta\ el\ ancho\ y\ el\ alto\ del\ rect\u00E1ngulo\ a\ nuevos\ valores\ en\ p\u00EDxeles.\r\n
+comment8.params=
+comment8.target=java.awt.Shape\ getShape()
+numComments=9

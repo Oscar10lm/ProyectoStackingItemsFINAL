@@ -6,14 +6,9 @@ import java.util.List;
 import java.util.*;
 
 /**
- * Canvas is a class to allow for simple graphical drawing on a canvas.
- * This is a modification of the general purpose Canvas, specially made for
- * the BlueJ "shapes" example. 
- *
- * @author: Bruce Quig
- * @author: Michael Kolling (mik)
- *
- * @version: 1.6 (shapes)
+ * Proporciona una interfaz sencilla para dibujar formas geométricas en una ventana.
+ * @author Michael Kolling and David J. Barnes (Modified)
+ * @version 1.0 (15 July 2000)()
  */
 public class Canvas{
     // Note: The implementation of this class (specifically the handling of
@@ -24,7 +19,7 @@ public class Canvas{
     private static Canvas canvasSingleton;
 
     /**
-     * Factory method to get the canvas singleton object.
+     * Obtiene la instancia única del lienzo aplicando el patrón Singleton.
      */
     public static Canvas getCanvas(){
         if(canvasSingleton == null) {
@@ -65,11 +60,7 @@ public class Canvas{
     }
 
     /**
-     * Set the canvas visibility and brings canvas to the front of screen
-     * when made visible. This method can also be used to bring an already
-     * visible canvas to the front of other windows.
-     * @param visible  boolean value representing the desired visibility of
-     * the canvas (true or false) 
+     * Define la visibilidad del lienzo y lo posiciona al frente.
      */
     public void setVisible(boolean visible){
         if(graphic == null) {
@@ -86,14 +77,8 @@ public class Canvas{
     }
 
     /**
-     * Draw a given shape onto the canvas.
-     * @param  referenceObject  an object to define identity for this shape
-     * @param  color            the color of the shape
-     * @param  shape            the shape object to be drawn on the canvas
+     * Dibuja un objeto geométrico en el lienzo con un color determinado.
      */
-     // Note: this is a slightly backwards way of maintaining the shape
-     // objects. It is carefully designed to keep the visible shape interfaces
-     // in this project clean and simple for educational purposes.
     public void draw(Object referenceObject, String color, java.awt.Shape shape){
         objects.remove(referenceObject);   // just in case it was already there
         objects.add(referenceObject);      // add at the end
@@ -102,8 +87,7 @@ public class Canvas{
     }
  
     /**
-     * Erase a given shape's from the screen.
-     * @param  referenceObject  the shape object to be erased 
+     * Elimina la representación visual de un objeto específico del lienzo.
      */
     public void erase(Object referenceObject){
         objects.remove(referenceObject);   // just in case it was already there
@@ -112,8 +96,7 @@ public class Canvas{
     }
 
     /**
-     * Set the foreground colour of the Canvas.
-     * @param  newColour   the new colour for the foreground of the Canvas 
+     * Establece el color que se utilizará para los próximos dibujos en el lienzo.
      */
     public void setForegroundColor(String colorString){
         if(colorString.equals("red"))
@@ -135,10 +118,7 @@ public class Canvas{
     }
 
     /**
-     * Wait for a specified number of milliseconds before finishing.
-     * This provides an easy way to specify a small delay which can be
-     * used when producing animations.
-     * @param  milliseconds  the number 
+     * Detiene la ejecución por un tiempo determinado para permitir animaciones.
      */
     public void wait(int milliseconds){
         try{

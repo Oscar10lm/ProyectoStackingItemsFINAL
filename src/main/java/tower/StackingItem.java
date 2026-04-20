@@ -7,8 +7,8 @@ import java.util.List;
 import shapes.Rectangle;
 
 /**
- * Elemento apilable base para Cup y Lid.
- * Encapsula geometría por bloques y comportamiento visual común.
+ * Clase base abstracta que define el comportamiento común de los elementos apilables.
+ * @author gaitan - lasso
  */
 public abstract class StackingItem {
     protected static final int BLOCK_SIZE = 25;
@@ -111,17 +111,17 @@ public abstract class StackingItem {
     }
 
     /**
-     * Aplica efectos antes de ser apilado en la torre.
+     * Ejecuta lógica personalizada antes de que el elemento se fije en la torre.
      */
     public abstract void applyPreStackEffect(Tower tower) throws TowerException;
 
     /**
-     * Aplica efectos despues de ser apilado en la torre.
+     * Ejecuta lógica personalizada una vez que el elemento ha sido apilado.
      */
     public abstract void applyPostStackEffect(Tower tower) throws TowerException;
 
     /**
-     * Verifica si el elemento puede ser retirado de la torre.
+     * Determina si las condiciones actuales de la torre permiten retirar este elemento.
      */
     public abstract boolean canBeRemoved(Tower tower);
 }

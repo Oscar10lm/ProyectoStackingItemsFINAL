@@ -4,9 +4,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Clase de pruebas de unidad C1 para métodos de consulta, orden y estado en Tower.
- *
- * Patrón: AAA + nombres should/shouldnt.
+ * Realiza pruebas unitarias sobre las consultas de estado, ordenamiento y persistencia visual de la torre.
+ * @author gaitan - lasso
  */
 public class TowerTestC1 {
 

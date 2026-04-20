@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import shapes.Rectangle;
 
 /**
- * Representa una taza formada por bloques rectangulares.
- * @author Juan Gaitán and Oscar Lasso
+ * Modela una taza que puede contener tapas o anidarse en otras tazas.
+ * @author gaitan - lasso
  */
 public class Cup extends StackingItem {
 
     private final ArrayList<Lid> lids;
 
     /**
-     * Construye una taza con identificador, tamaño y color.
+     * Inicializa una nueva taza con su identificador, tamaño y color.
      */
     public Cup(int id, int size, String color) {
         super(id, size, color);
@@ -84,14 +84,14 @@ public class Cup extends StackingItem {
     }
 
     /**
-     * Agrega una tapa a la taza.
+     * Vincula una tapa específica a esta taza.
      */
     public void addLid(Lid lid) {
         lids.add(lid);
     }
 
     /**
-     * Elimina la tapa superior.
+     * Desvincula y oculta la tapa que se encuentre en la posición superior.
      */
     public void removeTopLid() {
         if (!lids.isEmpty()) {
@@ -101,7 +101,7 @@ public class Cup extends StackingItem {
     }
 
     /**
-     * Elimina todas las tapas asociadas.
+     * Desvincula y oculta todas las tapas asociadas a esta taza.
      */
     public void removeAllLids() {
         for (Lid lid : lids) {
@@ -115,7 +115,7 @@ public class Cup extends StackingItem {
     }
 
     /**
-     * Verifica si una taza puede anidarse dentro de esta.
+     * Determina si una taza de menor tamaño puede introducirse en esta.
      */
     public boolean canNest(Cup innerCup) {
         // Una taza puede anidarse si esta taza no tiene tapas que lo impidan
@@ -144,43 +144,42 @@ public class Cup extends StackingItem {
     }
 
     /**
-     * Indica si esta taza elimina tapas bloqueantes al entrar.
+     * Indica si la taza tiene la capacidad de remover tapas que bloqueen su paso.
      */
     public boolean shouldClearBlockingLids() {
         return false;
     }
 
     /**
-     * Indica si esta taza desplaza objetos de menor tamano.
+     * Indica si la taza desplaza otros objetos menores al ser insertada.
      */
     public boolean shouldDisplaceSmallerItems() {
         return false;
     }
     
     /**
-     * Indica si esta taza elimina elementos menores al entrar.
+     * Indica si la taza elimina permanentemente elementos menores al entrar.
      */
     public boolean shouldPurgeSmallerItems() {
         return false;
     }
 
     /**
-     * Indica si esta taza es de tipo iron.
+     * Indica si la taza posee las propiedades especiales de tipo Iron.
      */
     public boolean isIronCup() {
         return false;
     }
     
     /**
-     * Indica si esta taza no puede retirarse de la torre.
+     * Indica si la taza se encuentra bloqueada en la base de la torre.
      */
     public boolean isLockedAtBase() {
         return false;
     }
 
     /**
-     * Marca la taza como bloqueada en la base.
-     * En la taza normal no hace nada.
+     * Aplica un bloqueo a la taza cuando se sitúa en la base de la torre.
      */
     public void lockAtBase() {
         // Hook polimorfico.

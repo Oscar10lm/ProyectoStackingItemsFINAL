@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=FearfulLid
-comment0.text=\r\n\ Tapa\ que\ solo\ entra\ si\ su\ taza\ companera\ existe\ y\ no\ sale\ si\ la\ esta\ tapando.\r\n
+comment0.text=\r\n\ Variante\ de\ tapa\ que\ exige\ la\ presencia\ de\ su\ taza\ compa\u00F1era\ y\ bloquea\ su\ propia\ remoci\u00F3n.\r\n\ @author\ gaitan\ -\ lasso\r\n
 comment1.params=id\ size\ color
 comment1.target=FearfulLid(int,\ int,\ java.lang.String)
 comment2.params=

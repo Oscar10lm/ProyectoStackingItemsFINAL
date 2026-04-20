@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 /**
- * Clase de TowerContest 
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Clase que resuelve el problema del concurso StackingCups mediante algoritmos de optimización.
+ * @author gaitan - lasso
  */
 public class TowerContest {
     public static List<Integer> algorithmStackingCups(int n, int h) {

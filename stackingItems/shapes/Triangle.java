@@ -3,10 +3,9 @@ package shapes;
 import java.awt.Polygon;
 
 /**
- * A triangle that can be manipulated and that draws itself on a canvas.
- *
- * @author  Michael Kolling and David J. Barnes
- * @version 1.0  (15 July 2000)
+ * Modela un triángulo que puede mostrarse y manipularse en un lienzo.
+ * @author Michael Kolling and David J. Barnes (Modified)
+ * @version 1.0 (15 July 2000)()
  */
 public class Triangle extends Shape {
 
@@ -16,7 +15,7 @@ public class Triangle extends Shape {
     private int width;
 
     /**
-     * Create a new triangle at default position with default color.
+     * Crea un triángulo con dimensiones y posición predeterminadas.
      */
     public Triangle() {
         super(140, 15, "green");
@@ -25,9 +24,7 @@ public class Triangle extends Shape {
     }
 
     /**
-     * Change the size to the new size.
-     * @param newHeight the new height in pixels. newHeight must be >=0.
-     * @param newWidth the new width in pixels. newWidth must be >=0.
+     * Ajusta la base y la altura del triángulo a nuevos valores en píxeles.
      */
     public void changeSize(int newHeight, int newWidth) {
         erase();

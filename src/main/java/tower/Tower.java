@@ -7,10 +7,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Representa una torre de tazas y tapas.
- * Controla apilamiento, anidamiento, altura máxima,
- * ordenamiento y representación visual.
- * @author Juan Gaitán and Oscar Lasso
+ * Gestiona una torre de tazas y tapas permitiendo apilamiento y anidamiento.
+ * @author gaitan - lasso
  */
 public class Tower {
 
@@ -43,7 +41,7 @@ public class Tower {
 
 
     /**
-     * Construye una torre con ancho visual y altura máxima.
+     * Inicializa la torre con un ancho y altura máxima específicos.
      */
     public Tower(int width, int maxHeight) {
         this.width = width;
@@ -57,7 +55,7 @@ public class Tower {
     }
     
     /**
-     * Construye una torre con el número de tazas dado.
+     * Crea una torre con una cantidad inicial de tazas.
      */
     public Tower(int cups) {
         this(DefaultWidth, DefaultMaxHeight);
@@ -73,15 +71,14 @@ public class Tower {
 
     
     /**
-     * Agrega una tapa a la taza indicada.
-     * Valida altura máxima antes de insertarla.
+     * Inserta una tapa estándar en la torre sobre la taza indicada.
      */
     public void pushLid(int id) {
         pushLid(id, "normal");
     }
 
     /**
-     * Agrega una tapa de tipo especifico.
+     * Inserta una tapa de un tipo específico en la torre.
      */
     public void pushLid(int id, String type) {
         try {
@@ -104,14 +101,14 @@ public class Tower {
     
 
     /**
-     * Agrega una taza respetando reglas de anidamiento y altura máxima.
+     * Inserta una taza estándar en la torre validando las reglas de apilamiento.
      */
     public void pushCup(int id) {
         pushCup(id, "normal");
     }
 
     /**
-     * Agrega una taza de tipo especifico.
+     * Inserta una taza de un tipo específico en la torre.
      */
     public void pushCup(int id, String type) {
         try {
@@ -188,7 +185,7 @@ public class Tower {
        
 
     /**
-     * Elimina una taza por identificador y reconstruye la torre.
+     * Elimina una taza específica de la torre usando su identificador.
      */
     public void removeCup(int id) {
         try {
@@ -221,7 +218,7 @@ public class Tower {
     }
 
     /**
-     * Elimina la tapa superior de la taza indicada.
+     * Retira la tapa superior de una taza identificada.
      */
     public void removeLid(int id) {
         try {
@@ -259,7 +256,7 @@ public class Tower {
 
 
     /**
-     * Elimina la última taza insertada.
+     * Retira la última taza agregada a la torre.
      */
     public void popCup() {
         try {
@@ -288,7 +285,7 @@ public class Tower {
     }
     
     /**
-     * Elimina la última tapa insertada en la torre.
+     * Retira la última tapa agregada a la torre.
      */
     public void popLid() {
         try {
@@ -325,7 +322,7 @@ public class Tower {
     //Reordenamiento
 
     /**
-     * Invierte el orden actual de la torre.
+     * Invierte el orden de los elementos actuales en la torre.
      */
     public void reverseTower() {
         try {
@@ -422,7 +419,7 @@ public class Tower {
     }
     
     /**
-     * Ordena la torre de mayor a menor tamaño.
+     * Reorganiza los elementos de la torre de mayor a menor tamaño.
      */
     public void orderTower() {
         try {
@@ -459,7 +456,7 @@ public class Tower {
     }
 
     /**
-     * Cubre las tazas que no tienen tapa usando las tapas ya existentes en la torre.
+     * Coloca tapas sueltas sobre tazas compatibles que no tengan tapa.
      */
     public void cover() {
         boolean movedAnyLid = false;
@@ -484,13 +481,7 @@ public class Tower {
     }
     
     /**
-     * Retorna un intercambio que reduzca la altura de la torre.
-     *
-     * El resultado tiene el formato:
-     * {{"cup|lid", "id"}, {"cup|lid", "id"}}
-     *
-     * Si no existe un intercambio que reduzca la altura al menos en 1,
-     * retorna una matriz vacía.
+     * Sugiere un intercambio de elementos para minimizar la altura total.
      */
     public String[][] swapToReduce() {
         int currentHeight = height();
@@ -551,16 +542,14 @@ public class Tower {
     
     
     /**
-     * Genera una configuración objetivo de alturas para n tazas y altura h.
-     * Delega en el algoritmo del contrato StackingCups.
+     * Determina la configuración ideal de alturas para el concurso.
      */
     public List<Integer> targetConfiguration(int n, int h) {
         return TowerContest.algorithmStackingCups(n, h);
     }
 
     /**
-     * Construye la torre a partir de una lista de alturas (2*id-1).
-     * Limpia la torre actual y agrega las tazas en el orden dado.
+     * Reconstruye la torre basándose en una lista de alturas específicas.
      */
     public void rebuildFromHeights(List<Integer> heights) throws tower.TowerException {
         clearTowerVisual();
@@ -580,7 +569,7 @@ public class Tower {
     // Consultas
 
     /**
-     * Retorna la altura actual en centímetros.
+     * Obtiene la altura actual de la torre en unidades de bloque.
      */
     public int height() {
 
@@ -588,7 +577,7 @@ public class Tower {
     }
 
     /**
-     * Retorna la altura actual en píxeles.
+     * Obtiene la altura actual de la torre expresada en píxeles.
      */
     public int getCurrentHeight() {
 
@@ -598,7 +587,7 @@ public class Tower {
     
 
     /**
-     * Retorna los identificadores de tazas con tapas.
+     * Lista los identificadores de todas las tazas que poseen tapa.
      */
     public int[] liddedCups() {
 
@@ -617,7 +606,7 @@ public class Tower {
     }
 
     /**
-     * Retorna la lista de elementos apilados.
+     * Proporciona un inventario detallado de todos los elementos en la torre.
      */
     public String[][] stackingItems() {
 
@@ -644,7 +633,7 @@ public class Tower {
     }
 
     /**
-     * Verifica si la torre está en estado válido.
+     * Verifica si el estado actual de la torre cumple con todas las reglas.
      */
     public boolean ok() {
 
@@ -671,7 +660,7 @@ public class Tower {
     //Control visual
 
     /**
-     * Hace visible la torre.
+     * Muestra gráficamente todos los componentes de la torre.
      */
     public void makeVisible() {
         isVisible = true;
@@ -698,7 +687,7 @@ public class Tower {
     }
 
     /**
-     * Hace invisible la torre.
+     * Oculta gráficamente todos los componentes de la torre.
      */
     public void makeInvisible() {
         isVisible = false;
@@ -719,7 +708,7 @@ public class Tower {
     }
 
     /**
-     * Finaliza el simulador y limpia todos los elementos.
+     * Cierra el simulador y libera todos los recursos visuales.
      */
     public void exit() {
 
@@ -750,7 +739,7 @@ public class Tower {
     //Métodos auxiliares
 
     /**
-     * Reconstruye la torre desde la base.
+     * Reposiciona todos los elementos para reflejar el estado interno.
      */
     public void rebuildTower() {
 

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Taza que desplaza objetos de menor tamano y puede bloquearse en la base.
+ * Variante de taza que impone jerarquía desplazando elementos menores y bloqueándose en la base.
+ * @author gaitan - lasso
  */
 public class HierarchicalCup extends Cup {
     private boolean lockedAtBase;

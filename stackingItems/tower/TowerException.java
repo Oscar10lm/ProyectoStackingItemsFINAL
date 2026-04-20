@@ -1,5 +1,10 @@
 package tower;
 
+/**
+ * Define las excepciones personalizadas para los errores de lógica en la torre.
+ * @author gaitan - lasso
+ */
+
 public class TowerException extends Exception {
     
     public static final String HEIGHT_EXCEEDED = "No se puede agregar el elemento. Supera la altura máxima.";

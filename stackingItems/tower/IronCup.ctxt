@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=IronCup
-comment0.text=\r\n\ Taza\ que\ elimina\ elementos\ menores\ al\ colocarse,\r\n\ excepto\ otras\ tazas\ de\ tipo\ iron.\r\n
+comment0.text=\r\n\ Variante\ de\ taza\ que\ elimina\ permanentemente\ cualquier\ elemento\ de\ menor\ tama\u00F1o\ al\ ser\ apilada.\r\n\ @author\ gaitan\ -\ lasso\r\n
 comment1.params=id\ size\ color
 comment1.target=IronCup(int,\ int,\ java.lang.String)
 comment2.params=

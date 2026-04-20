@@ -2,8 +2,9 @@ package shapes;
 
 
 /**
- * Clase base abstracta para las figuras del simulador.
- * Centraliza posición, color, visibilidad y movimiento.
+ * Proporciona la funcionalidad básica para todas las formas geométricas en el simulador.
+ * @author Michael Kolling and David J. Barnes (Modified)
+ * @version 1.0 (15 July 2000)()
  */
 public abstract class Shape {
     private int xPosition;

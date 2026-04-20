@@ -3,10 +3,9 @@ package shapes;
 import java.awt.geom.Ellipse2D;
 
 /**
- * A circle that can be manipulated and that draws itself on a canvas.
- *
- * @author  Michael Kolling and David J. Barnes
- * @version 1.0.  (15 July 2000)
+ * Modela un círculo que puede mostrarse y manipularse en un lienzo.
+ * @author Michael Kolling and David J. Barnes (Modified)
+ * @version 1.0 (15 July 2000)()
  */
 public class Circle extends Shape {
 
@@ -20,8 +19,7 @@ public class Circle extends Shape {
     }
 
     /**
-     * Change the size.
-     * @param newDiameter the new size (in pixels). Size must be >=0.
+     * Ajusta el diámetro del círculo a un nuevo valor en píxeles.
      */
     public void changeSize(int newDiameter) {
         erase();

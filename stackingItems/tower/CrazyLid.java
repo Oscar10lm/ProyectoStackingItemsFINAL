@@ -1,7 +1,8 @@
 package tower;
 
 /**
- * Tapa que se ubica debajo de su taza companera.
+ * Variante de tapa con comportamiento inusual que se posiciona debajo de su taza asociada.
+ * @author gaitan - lasso
  */
 public class CrazyLid extends Lid {
 

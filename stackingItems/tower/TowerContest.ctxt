@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=TowerContest
-comment0.text=\r\n\ Clase\ de\ TowerContest\ \r\n\ \r\n\ @author\ (your\ name)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\r\n\ Clase\ que\ resuelve\ el\ problema\ del\ concurso\ StackingCups\ mediante\ algoritmos\ de\ optimizaci\u00F3n.\r\n\ @author\ gaitan\ -\ lasso\r\n
 comment1.params=n\ h
 comment1.target=java.util.List\ algorithmStackingCups(int,\ int)
 comment2.params=n\ h

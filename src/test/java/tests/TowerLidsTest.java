@@ -15,10 +15,8 @@ import java.util.ArrayList;
 
 
 /**
- * Clase de pruebas de unidad para tapas en Tower.
- *
- * @author Juan Diego Gaita, Oscar Lasso
- * @version 1.0
+ * Realiza pruebas unitarias exhaustivas sobre el comportamiento de las tapas en la torre.
+ * @author gaitan - lasso
  */
 public class TowerLidsTest
 {

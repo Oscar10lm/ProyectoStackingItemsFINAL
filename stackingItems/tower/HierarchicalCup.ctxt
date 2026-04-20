@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=HierarchicalCup
-comment0.text=\r\n\ Taza\ que\ desplaza\ objetos\ de\ menor\ tamano\ y\ puede\ bloquearse\ en\ la\ base.\r\n
+comment0.text=\r\n\ Variante\ de\ taza\ que\ impone\ jerarqu\u00EDa\ desplazando\ elementos\ menores\ y\ bloque\u00E1ndose\ en\ la\ base.\r\n\ @author\ gaitan\ -\ lasso\r\n
 comment1.params=id\ size\ color
 comment1.target=HierarchicalCup(int,\ int,\ java.lang.String)
 comment2.params=

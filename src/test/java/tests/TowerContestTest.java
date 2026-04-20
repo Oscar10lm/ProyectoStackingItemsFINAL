@@ -6,8 +6,8 @@ import tower.TowerContest;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Pruebas unitarias para TowerContest.
- * Enfoque agil/XP: pruebas pequenas, claras y centradas en comportamiento esencial.
+ * Evalúa los resultados del resolvedor automático para el concurso de tazas.
+ * @author gaitan - lasso
  */
 public class TowerContestTest {
 

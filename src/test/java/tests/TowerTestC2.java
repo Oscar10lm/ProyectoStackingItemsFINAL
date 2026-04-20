@@ -7,15 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Arrays;
 
 /**
- * Clase de pruebas de unidad C2 para métodos de construcción e intercambio en Tower.
- *
- * Alcance ciclo 2:
- * - Constructor Tower(cups)
- * - swap()
- * - cover()
- * - swapToReduce()
- *
- * Patrón aplicado: AAA + nomenclatura Should/Shouldnt.
+ * Realiza pruebas unitarias sobre el constructor de tazas y la lógica de intercambio de la torre.
+ * @author gaitan - lasso
  */
 public class TowerTestC2 {
 

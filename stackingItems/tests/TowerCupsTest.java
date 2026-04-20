@@ -20,10 +20,8 @@ import java.lang.reflect.Field;
 
 
 /**
- * Clase de Test de pruebas de unidad para Cup en Tower.
- *
- * @author  Juan Diego Gaita, Oscar Lasso
- * @version 1.0
+ * Realiza pruebas unitarias exhaustivas sobre el comportamiento de las tazas en la torre.
+ * @author gaitan - lasso
  */
 public class TowerCupsTest
 {

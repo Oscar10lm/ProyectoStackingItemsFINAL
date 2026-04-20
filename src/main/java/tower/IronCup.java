@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Taza que elimina elementos menores al colocarse,
- * excepto otras tazas de tipo iron.
+ * Variante de taza que elimina permanentemente cualquier elemento de menor tamaño al ser apilada.
+ * @author gaitan - lasso
  */
 public class IronCup extends Cup {
 

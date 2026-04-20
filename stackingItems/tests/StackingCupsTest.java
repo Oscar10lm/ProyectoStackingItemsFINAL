@@ -8,8 +8,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Pruebas unitarias para el algoritmo de StackingCups.
- * Enfoque agil/XP: validar reglas de negocio clave con casos pequenos.
+ * Valida el algoritmo matemático de distribución de alturas para el concurso de tazas.
+ * @author gaitan - lasso
  */
 public class StackingCupsTest {
 

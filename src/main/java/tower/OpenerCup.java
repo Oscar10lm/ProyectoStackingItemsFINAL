@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Taza que elimina tapas que le impiden el paso al entrar.
+ * Variante de taza que tiene la capacidad de retirar tapas bloqueantes al ser insertada.
+ * @author gaitan - lasso
  */
 public class OpenerCup extends Cup {
 
