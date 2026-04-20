@@ -51,11 +51,12 @@ El simulador es un entorno completamente interactivo 🕹️:
 * 🔀 **Reorganización Inteligente:** Ordenar, invertir o intercambiar piezas.
 * 🪄 **Comportamientos Especiales:**
     * 💥 *Opener Cup:* Destruye las tapas que le estorban.
+    * 🩶 *IronCup:* Elimina cualquier objeto de la torre contiguo hacia arriba o hacia abajo a excepcion de otro IronCup.
     * 👑 *Hierarchical Cup:* Empuja a las tazas más pequeñas hacia arriba.
     * 🙃 *Crazy Lid:* Se coloca debajo de la taza como base.
     * 🫣 *Fearful Lid:* Solo entra si su taza está adentro; no sale si la está protegiendo.
 * 📐 **Cálculos Dinámicos:** Calcula la altura exacta considerando que las tazas encajan unas dentro de otras.
-* 🏆 **Solucionador ICPC:** Calcula el orden exacto para ganar el reto de la maratón y lo grafica.
+* 🏆 **Solucionador ICPC:** Soluciona y simula el problema de la maratón de StackingCups.
 
 Captura de ejemplo de una torre:
 
@@ -67,9 +68,8 @@ Captura de ejemplo de una torre:
 ## 🚀 Por mejorar
 Para futuras versiones o extensiones del proyecto 🔮:
 
-1.  🖥️ **Interfaz Gráfica Moderna:** Migrar del `Canvas` básico a JavaFX o Spring Boot (Web) para permitir "Drag & Drop" con el mouse.
+1.  🖥️ **Interfaz Gráfica Moderna:** Migrar del `Canvas` básico a una interfaz gráfica más completa.
 2.  🎬 **Animaciones Fluidas:** Mostrar visualmente cómo caen o rebotan las piezas al apilarse.
 3.  ⚡ **Optimización (Big Data):** Implementar programación dinámica para resolver el reto ICPC con millones de tazas en milisegundos.
-4.  🤖 **Integración Continua (CI/CD):** Configurar GitHub Actions para ejecutar pruebas automáticas (JaCoCo/PMD) en cada nuevo cambio subido al repositorio.
 
 
