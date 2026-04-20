@@ -26,6 +26,14 @@ El proyecto se construyó de manera progresiva, dividiendo el trabajo en **ciclo
 ## 🏛️ Diseño
 El diseño arquitectónico separa lo visual de la lógica, logrando alta **Reutilización y Extensibilidad** 🧩. 
 
+Captura Diseño de Dominio:
+
+![alt text](DiseñoDominio.png)
+
+Captura Diseño de Shapes:
+
+![alt text](DiseñoShapes.png)
+
 📦 **Paquetes principales:**
 * 🎨 `shapes`: Maneja la interfaz gráfica (Círculos, Rectángulos, Triángulos y el Canvas).
 * ⚙️ `tower`: Contiene el cerebro y las reglas lógicas.
@@ -48,6 +56,10 @@ El simulador es un entorno completamente interactivo 🕹️:
     * 🫣 *Fearful Lid:* Solo entra si su taza está adentro; no sale si la está protegiendo.
 * 📐 **Cálculos Dinámicos:** Calcula la altura exacta considerando que las tazas encajan unas dentro de otras.
 * 🏆 **Solucionador ICPC:** Calcula el orden exacto para ganar el reto de la maratón y lo grafica.
+
+Captura de ejemplo de una torre:
+
+![alt text](EjemploTorre.png)
 
 
 ---
