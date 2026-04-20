@@ -6,7 +6,7 @@
 👨‍💻 **Desarrolladores:** Juan Diego Gaitán y Oscar Lasso 
 🎓 **Institución:** Escuela Colombiana de Ingeniería Julio Garavito (5to Semestre - Desarrollo Orientado por Objetos)
 
-![Prueba Gráfica - Introducción: Vista general del simulador en funcionamiento](https://via.placeholder.com/800x400.png?text=Vista+General+del+Simulador+Stacking+Items)
+
 
 ---
 
@@ -19,7 +19,7 @@ El proyecto se construyó de manera progresiva, dividiendo el trabajo en **ciclo
 * **Ciclo 4 - Extensión Compleja:** 🌪️ Nuevos tipos de tazas y tapas con reglas especiales.
 * **Cierre y Calidad:** ✅ Uso de **IntelliJ IDEA**, **JaCoCo** (cubrimiento > 75%) y **PMD** (código limpio). Todas las pruebas bajo el patrón **AAA (Arrange, Act, Assert)**. 🧪
 
-![Prueba Gráfica - Metodología: Reporte de cobertura de JaCoCo y PMD](https://via.placeholder.com/800x400.png?text=Reporte+de+Cobertura+JaCoCo+%28%3E75%25%29+y+PMD)
+
 
 ---
 
@@ -33,7 +33,6 @@ El diseño arquitectónico separa lo visual de la lógica, logrando alta **Reuti
 **¿Por qué este diseño?** 🤔
 Mediante la *herencia*, todo nace de una clase base `StackingItem`. De ella derivan `Cup` (Taza) y `Lid` (Tapa), permitiendo crear versiones especiales (ej. Taza Jerárquica) sin dañar el simulador original. Los errores se controlan con la clase personalizada `TowerException`. 🛡️
 
-![Prueba Gráfica - Diseño: Diagrama de Clases UML del paquete Tower y Shapes](https://via.placeholder.com/800x400.png?text=Diagrama+de+Clases+UML+-+Herencia+de+StackingItem)
 
 ---
 
@@ -50,7 +49,6 @@ El simulador es un entorno completamente interactivo 🕹️:
 * 📐 **Cálculos Dinámicos:** Calcula la altura exacta considerando que las tazas encajan unas dentro de otras.
 * 🏆 **Solucionador ICPC:** Calcula el orden exacto para ganar el reto de la maratón y lo grafica.
 
-![Prueba Gráfica - Funcionalidades: GIF o secuencia mostrando la interacción de tazas especiales](https://via.placeholder.com/800x400.png?text=Demostracion+Visual+-+Comportamientos+Especiales)
 
 ---
 
@@ -62,4 +60,4 @@ Para futuras versiones o extensiones del proyecto 🔮:
 3.  ⚡ **Optimización (Big Data):** Implementar programación dinámica para resolver el reto ICPC con millones de tazas en milisegundos.
 4.  🤖 **Integración Continua (CI/CD):** Configurar GitHub Actions para ejecutar pruebas automáticas (JaCoCo/PMD) en cada nuevo cambio subido al repositorio.
 
-![Prueba Gráfica - Por Mejorar: Mockup de una nueva interfaz gráfica moderna (JavaFX/Web)](https://via.placeholder.com/800x400.png?text=Mockup+-+Nueva+Interfaz+Grafica+con+Drag+%26+Drop)
+
