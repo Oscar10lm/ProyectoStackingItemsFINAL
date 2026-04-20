@@ -1,55 +1,65 @@
-# Stacking Items 🏆
+# 🏆 Stacking Items 🏗️
 
-## Introducción
-**Stacking Items** es un simulador visual y un solucionador algorítmico inspirado en el famoso problema "Stacking Cups" (Problema J) de la Maratón Internacional de Programación ICPC 2025. El proyecto permite a los usuarios interactuar con torres formadas por diferentes tipos de tazas y tapas, además de calcular cómo apilarlas para alcanzar una altura objetivo exacta.
+## 📝 Introducción
+**Stacking Items** es un simulador visual y un solucionador algorítmico inspirado en el famoso problema "Stacking Cups" (Problema J) de la Maratón Internacional de Programación ICPC 2025. 🥇 El proyecto permite a los usuarios interactuar con torres formadas por diferentes tipos de tazas y tapas, además de calcular cómo apilarlas para alcanzar una altura objetivo exacta. 📏
 
-Este proyecto fue desarrollado por **Juan Diego Gaitán** y **Oscar Lasso**, estudiantes de quinto semestre de la **Escuela Colombiana de Ingeniería Julio Garavito**, como parte de la asignatura de Desarrollo Orientado por Objetos.
+👨‍💻 **Desarrolladores:** Juan Diego Gaitán y Oscar Lasso 
+🎓 **Institución:** Escuela Colombiana de Ingeniería Julio Garavito (5to Semestre - Desarrollo Orientado por Objetos)
 
----
-
-## Metodología
-El proyecto se construyó de manera progresiva, dividiendo el trabajo en **ciclos de desarrollo** (mini-ciclos). Se adoptaron enfoques de la **Programación Ágil y Extreme Programming (XP)**, priorizando siempre que el código fuera fácil de leer, de probar y, sobre todo, fácil de extender en el futuro.
-
-El progreso se dividió de la siguiente manera:
-1. **Ciclo 1 - La Base:** Se construyó el simulador básico que permitía crear una torre, apilar tazas y tapas regulares, y consultar la altura total.
-2. **Ciclo 2 - Interacción:** Se agregaron funcionalidades para intercambiar objetos de lugar, tapar tazas automáticamente y buscar movimientos para reducir la altura de la torre.
-3. **Ciclo 3 - El Solucionador (Maratón):** Se implementó el algoritmo capaz de resolver el problema original de la maratón, calculando el orden exacto de las tazas para lograr una altura específica e integrándolo visualmente al simulador.
-4. **Ciclo 4 - Extensión Compleja:** Se introdujeron nuevos tipos de tazas (Normales, Abridoras, Jerárquicas) y tapas (Normales, Miedosas, Locas). Esto puso a prueba la capacidad del código para aceptar nuevas reglas sin dañar lo que ya funcionaba.
-5. **Cierre y Calidad:** Aunque inicialmente se proponía Eclipse, el equipo optó por utilizar **IntelliJ IDEA** como entorno de desarrollo. Se aseguró la calidad del proyecto integrando **JaCoCo** para garantizar un cubrimiento de pruebas unitarias superior al 75%, y **PMD** para aplicar reglas estrictas de código limpio. Todas las pruebas se diseñaron bajo el patrón **AAA (Arrange, Act, Assert)** para asegurar que cada parte del código hiciera exactamente lo que debía hacer.
+![Prueba Gráfica - Introducción: Vista general del simulador en funcionamiento](https://via.placeholder.com/800x400.png?text=Vista+General+del+Simulador+Stacking+Items)
 
 ---
 
-## Diseño
-El diseño arquitectónico del proyecto se pensó para separar la "apariencia" (lo visual) de las "reglas del juego" (la lógica). Esto se logró dividiendo el código en dos paquetes principales:
+## 🏃‍♂️ Metodología
+El proyecto se construyó de manera progresiva, dividiendo el trabajo en **ciclos de desarrollo** (mini-ciclos). 🔄 Se adoptaron enfoques de la **Programación Ágil y Extreme Programming (XP)**, priorizando que el código fuera fácil de leer, probar y extender. 📈
 
-* **Paquete `shapes` (Formas):** Se encarga de todo lo que el usuario ve en la pantalla. Contiene las figuras geométricas básicas como círculos, rectángulos y triángulos, y el lienzo (Canvas) donde se dibujan.
-* **Paquete `tower` (Torre):** Contiene el cerebro del proyecto. Aquí viven las reglas de cómo se comportan las tazas y las tapas. 
+* **Ciclo 1 - La Base:** 🧱 Simulador básico (crear torre, apilar, consultar altura).
+* **Ciclo 2 - Interacción:** 🖐️ Intercambio de objetos y búsqueda de movimientos para reducir altura.
+* **Ciclo 3 - El Solucionador:** 🧠 Algoritmo para resolver el problema original de la maratón ICPC.
+* **Ciclo 4 - Extensión Compleja:** 🌪️ Nuevos tipos de tazas y tapas con reglas especiales.
+* **Cierre y Calidad:** ✅ Uso de **IntelliJ IDEA**, **JaCoCo** (cubrimiento > 75%) y **PMD** (código limpio). Todas las pruebas bajo el patrón **AAA (Arrange, Act, Assert)**. 🧪
 
-**¿Por qué se eligió este diseño?**
-Se eligió porque permite la **Reutilización y Extensibilidad**. Al usar conceptos de herencia (donde un objeto hereda características de otro), se creó una clase general llamada `StackingItem` (Elemento Apilable). De ella nacen la Taza (`Cup`) y la Tapa (`Lid`). Luego, de estas nacen versiones más locas y complejas (como la Tapa Miedosa o la Taza Jerárquica). 
-Si el día de mañana se quiere inventar una "Taza Explosiva", solo se debe crear una nueva clase que herede las reglas básicas y agregarle su comportamiento especial, sin tener que reescribir todo el simulador. Además, los errores se controlan de forma centralizada mediante excepciones propias (`TowerException`).
-
----
-
-## Funcionalidades
-El simulador no es solo una calculadora, es un entorno interactivo. Sus características más relevantes son:
-
-* **Gestión Manual de la Torre:** Permite al usuario crear torres, agregar o quitar tazas y tapas una por una.
-* **Reorganización Inteligente:** Puede ordenar las piezas de mayor a menor, invertir el orden de la torre, o intercambiar piezas de posición.
-* **Comportamientos Especiales:**
-    * *Opener Cup (Taza Abridora):* Al entrar, destruye las tapas que le estorban.
-    * *Hierarchical Cup (Taza Jerárquica):* Empuja hacia arriba a las tazas más pequeñas para abrirse paso hasta el fondo.
-    * *Crazy Lid (Tapa Loca):* En lugar de ir arriba de su taza, se coloca debajo como base.
-    * *Fearful Lid (Tapa Miedosa):* Solo entra a la torre si su taza compañera ya está adentro, y se niega a salir si la está protegiendo.
-* **Cálculo de Alturas:** El simulador calcula la altura total dinámica de la torre teniendo en cuenta que las tapas miden 1 cm y que las tazas encajan unas dentro de otras dependiendo de su tamaño.
-* **Solucionador de la Maratón:** Recibe una cantidad de tazas y una altura objetivo, e indica exactamente en qué orden deben apilarse para ganar el reto, mostrando la solución de forma visual.
+![Prueba Gráfica - Metodología: Reporte de cobertura de JaCoCo y PMD](https://via.placeholder.com/800x400.png?text=Reporte+de+Cobertura+JaCoCo+%28%3E75%25%29+y+PMD)
 
 ---
 
-## Por mejorar
-Aunque el proyecto cumple con los requisitos más exigentes, siempre hay espacio para crecer. Algunas recomendaciones para quienes deseen extender este trabajo:
+## 🏛️ Diseño
+El diseño arquitectónico separa lo visual de la lógica, logrando alta **Reutilización y Extensibilidad** 🧩. 
 
-1. **Interfaz Gráfica Moderna (GUI):** Actualmente se usa un lienzo básico (`Canvas`). Mover el proyecto a una tecnología más moderna como JavaFX, o incluso conectarlo a una página web usando Spring Boot, haría que el simulador fuera mucho más atractivo e interactivo (permitiendo, por ejemplo, arrastrar y soltar las tazas con el mouse).
-2. **Animaciones Fluidas:** En lugar de que las piezas aparezcan mágicamente en su lugar, se podrían programar animaciones que muestren cómo las tazas caen y las tapas rebotan o se acomodan según sus reglas especiales.
-3. **Optimización para Datos Masivos:** Aunque el solucionador algorítmico es efectivo, si se le piden calcular torres con millones de tazas, podría tardar. Implementar técnicas avanzadas de programación dinámica o heurísticas podría hacer que encuentre las soluciones en milisegundos.
-4. **Integración Continua (CI/CD):** Configurar GitHub Actions para que, cada vez que alguien suba código nuevo, el sistema corra automáticamente las pruebas con JaCoCo y PMD, asegurando que nadie rompa las reglas de calidad por accidente.
+📦 **Paquetes principales:**
+* 🎨 `shapes`: Maneja la interfaz gráfica (Círculos, Rectángulos, Triángulos y el Canvas).
+* ⚙️ `tower`: Contiene el cerebro y las reglas lógicas.
+
+**¿Por qué este diseño?** 🤔
+Mediante la *herencia*, todo nace de una clase base `StackingItem`. De ella derivan `Cup` (Taza) y `Lid` (Tapa), permitiendo crear versiones especiales (ej. Taza Jerárquica) sin dañar el simulador original. Los errores se controlan con la clase personalizada `TowerException`. 🛡️
+
+![Prueba Gráfica - Diseño: Diagrama de Clases UML del paquete Tower y Shapes](https://via.placeholder.com/800x400.png?text=Diagrama+de+Clases+UML+-+Herencia+de+StackingItem)
+
+---
+
+## ✨ Funcionalidades
+El simulador es un entorno completamente interactivo 🕹️:
+
+* 🏗️ **Gestión Manual:** Crear torres, agregar/quitar piezas una por una.
+* 🔀 **Reorganización Inteligente:** Ordenar, invertir o intercambiar piezas.
+* 🪄 **Comportamientos Especiales:**
+    * 💥 *Opener Cup:* Destruye las tapas que le estorban.
+    * 👑 *Hierarchical Cup:* Empuja a las tazas más pequeñas hacia arriba.
+    * 🙃 *Crazy Lid:* Se coloca debajo de la taza como base.
+    * 🫣 *Fearful Lid:* Solo entra si su taza está adentro; no sale si la está protegiendo.
+* 📐 **Cálculos Dinámicos:** Calcula la altura exacta considerando que las tazas encajan unas dentro de otras.
+* 🏆 **Solucionador ICPC:** Calcula el orden exacto para ganar el reto de la maratón y lo grafica.
+
+![Prueba Gráfica - Funcionalidades: GIF o secuencia mostrando la interacción de tazas especiales](https://via.placeholder.com/800x400.png?text=Demostracion+Visual+-+Comportamientos+Especiales)
+
+---
+
+## 🚀 Por mejorar
+Para futuras versiones o extensiones del proyecto 🔮:
+
+1.  🖥️ **Interfaz Gráfica Moderna:** Migrar del `Canvas` básico a JavaFX o Spring Boot (Web) para permitir "Drag & Drop" con el mouse.
+2.  🎬 **Animaciones Fluidas:** Mostrar visualmente cómo caen o rebotan las piezas al apilarse.
+3.  ⚡ **Optimización (Big Data):** Implementar programación dinámica para resolver el reto ICPC con millones de tazas en milisegundos.
+4.  🤖 **Integración Continua (CI/CD):** Configurar GitHub Actions para ejecutar pruebas automáticas (JaCoCo/PMD) en cada nuevo cambio subido al repositorio.
+
+![Prueba Gráfica - Por Mejorar: Mockup de una nueva interfaz gráfica moderna (JavaFX/Web)](https://via.placeholder.com/800x400.png?text=Mockup+-+Nueva+Interfaz+Grafica+con+Drag+%26+Drop)
